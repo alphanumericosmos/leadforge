@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LeadForge — Geração de Leads com IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#09090b;
+  --surface:#111113;
+  --surface2:#18181b;
+  --surface3:#1f1f23;
+  --surface4:#27272a;
+  --border:rgba(255,255,255,0.07);
+  --border-md:rgba(255,255,255,0.11);
+  --border-hi:rgba(255,255,255,0.18);
+  --indigo:#6366f1;
+  --indigo-dim:rgba(99,102,241,0.14);
+  --indigo-glow:rgba(99,102,241,0.28);
+  --emerald:#10b981;
+  --emerald-dim:rgba(16,185,129,0.12);
+  --amber:#f59e0b;
+  --amber-dim:rgba(245,158,11,0.12);
+  --rose:#f43f5e;
+  --rose-dim:rgba(244,63,94,0.12);
+  --cyan:#06b6d4;
+  --text:#fafafa;
+  --text-2:#a1a1aa;
+  --text-3:#71717a;
+  --text-4:#3f3f46;
+  --r:var(--font-body);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+input,select,textarea,button{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--surface4);border-radius:99px;}
+
+.page{display:none;padding-top:60px;min-height:100vh;}
+.page.active{display:block;}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:60px;
+  padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;
+  background:rgba(9,9,11,0.82);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
+}
+.logo{display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none;}
+.logo-mark{
+  width:28px;height:28px;border-radius:7px;background:var(--indigo);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;flex-shrink:0;
+}
+.logo-name{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:-0.4px;color:var(--text);}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-link{padding:0.35rem 0.7rem;border-radius:6px;font-size:0.875rem;font-weight:500;color:var(--text-2);cursor:pointer;transition:all 0.13s;border:none;background:none;}
+.nav-link:hover{color:var(--text);background:var(--surface2);}
+.nav-r{display:flex;align-items:center;gap:0.5rem;}
+.btn-ghost{padding:0.4rem 0.875rem;border-radius:6px;font-size:0.875rem;font-weight:500;color:var(--text-2);background:transparent;border:none;cursor:pointer;transition:all 0.13s;}
+.btn-ghost:hover{color:var(--text);background:var(--surface2);}
+.btn-cta{padding:0.4rem 1rem;border-radius:6px;font-size:0.875rem;font-weight:600;background:var(--indigo);color:#fff;border:none;cursor:pointer;transition:all 0.15s;}
+.btn-cta:hover{background:#4f52d4;box-shadow:0 0 0 3px var(--indigo-glow);}
+.nav-user{display:none;align-items:center;gap:0.75rem;}
+.nav-email-txt{font-size:0.8rem;color:var(--text-3);}
+.nav-av{width:30px;height:30px;border-radius:50%;background:var(--indigo);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+.btn-out{padding:0.35rem 0.75rem;border-radius:6px;font-size:0.8rem;font-weight:500;color:var(--text-3);background:transparent;border:1px solid var(--border);cursor:pointer;transition:all 0.13s;}
+.btn-out:hover{color:var(--text);border-color:var(--border-md);}
+
+/* ─── HERO ─── */
+.hero{position:relative;padding:7rem 1.5rem 5.5rem;text-align:center;overflow:hidden;}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 80% 55% at 50% 0%,black,transparent);}
+.hero-glow{position:absolute;top:-15%;left:50%;transform:translateX(-50%);width:860px;height:560px;pointer-events:none;background:radial-gradient(ellipse at center top,rgba(99,102,241,0.11) 0%,transparent 65%);}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border-md);border-radius:999px;padding:0.3rem 0.875rem;font-size:0.75rem;font-weight:500;color:var(--text-2);margin-bottom:1.75rem;position:relative;}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--emerald);box-shadow:0 0 7px var(--emerald);animation:blink 2.2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}55%{opacity:0.25;}}
+.hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(2.4rem,5vw,4.4rem);font-weight:800;line-height:1.09;letter-spacing:-2px;max-width:800px;margin:0 auto 1.25rem;position:relative;}
+.grad{background:linear-gradient(135deg,#fff 20%,#a5b4fc 65%,#818cf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:1.05rem;color:var(--text-2);line-height:1.75;max-width:500px;margin:0 auto 2.25rem;position:relative;font-weight:400;}
+.hero-btns{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;position:relative;}
+.btn-p{display:inline-flex;align-items:center;gap:6px;padding:0.75rem 1.5rem;border-radius:8px;font-size:0.9rem;font-weight:600;background:var(--indigo);color:#fff;border:none;cursor:pointer;transition:all 0.18s;}
+.btn-p:hover{background:#4f52d4;transform:translateY(-1px);box-shadow:0 8px 24px var(--indigo-glow);}
+.btn-o{display:inline-flex;align-items:center;gap:6px;padding:0.75rem 1.5rem;border-radius:8px;font-size:0.9rem;font-weight:500;background:var(--surface2);color:var(--text);border:1px solid var(--border-md);cursor:pointer;transition:all 0.18s;}
+.btn-o:hover{background:var(--surface3);border-color:var(--border-hi);}
+.hero-trust{display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap;margin-top:2.5rem;position:relative;}
+.trust-i{display:flex;align-items:center;gap:5px;font-size:0.8rem;color:var(--text-3);font-weight:500;}
+
+/* ─── LOGOS ─── */
+.logos{padding:2rem 1.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center;}
+.logos p{font-size:0.7rem;font-weight:600;color:var(--text-4);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.25rem;}
+.logos-row{display:flex;align-items:center;justify-content:center;gap:2.5rem;flex-wrap:wrap;}
+.logo-co{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.95rem;color:var(--surface4);letter-spacing:-0.3px;}
+
+/* ─── STATS ─── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.stat{padding:2.25rem 1.5rem;text-align:center;border-right:1px solid var(--border);}
+.stat:last-child{border-right:none;}
+.stat-n{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.25rem;font-weight:800;letter-spacing:-1.5px;}
+.stat-n .ac{color:var(--indigo);}
+.stat-l{font-size:0.8rem;color:var(--text-3);margin-top:0.2rem;font-weight:500;}
+
+/* ─── SECTION ─── */
+.sec{padding:5.5rem 1.5rem;max-width:1180px;margin:0 auto;}
+.sec-eye{display:inline-flex;align-items:center;gap:6px;font-size:0.72rem;font-weight:700;color:var(--indigo);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:0.875rem;}
+.sec-eye::before{content:'';width:12px;height:2px;border-radius:1px;background:var(--indigo);}
+.sec-h{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:0.875rem;}
+.sec-p{font-size:0.95rem;color:var(--text-2);line-height:1.75;max-width:440px;}
+
+/* ─── FEATURES ─── */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-top:3rem;}
+.ftile{background:var(--surface);padding:2rem;transition:background 0.18s;}
+.ftile:hover{background:var(--surface2);}
+.ftile.wide{grid-column:span 2;}
+.ficon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:1.25rem;}
+.fh{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.975rem;margin-bottom:0.375rem;}
+.fp{font-size:0.875rem;color:var(--text-2);line-height:1.65;}
+
+
+
+/* ─── PRICING ─── */
+.pricing-bg{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.pricing-in{max-width:1100px;margin:0 auto;padding:5.5rem 1.5rem;}
+.tog-row{display:flex;align-items:center;gap:0.5rem;margin-top:1.5rem;}
+.tog-track{width:38px;height:21px;border-radius:999px;background:var(--surface4);position:relative;cursor:pointer;transition:background 0.2s;}
+.tog-track.on{background:var(--indigo);}
+.tog-thumb{position:absolute;top:2.5px;left:2.5px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform 0.2s;}
+.tog-track.on .tog-thumb{transform:translateX(17px);}
+.tog-label{font-size:0.85rem;color:var(--text-2);font-weight:500;}
+.tog-save{font-size:0.7rem;font-weight:600;color:var(--emerald);background:var(--emerald-dim);border-radius:999px;padding:0.15rem 0.5rem;margin-left:2px;}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2.5rem;}
+.pcard{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:1.75rem;position:relative;transition:border-color 0.18s;}
+.pcard:hover{border-color:var(--border-md);}
+.pcard.feat{border-color:var(--indigo);background:linear-gradient(160deg,rgba(99,102,241,0.05) 0%,var(--bg) 50%);}
+.pbadge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:0.62rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;padding:0.2rem 0.75rem;border-radius:999px;white-space:nowrap;}
+.pname{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:0.875rem;color:var(--text-2);margin-bottom:1rem;}
+.pprice{display:flex;align-items:baseline;gap:2px;margin-bottom:0.25rem;}
+.pcur{font-size:0.95rem;font-weight:600;color:var(--text-2);margin-top:4px;}
+.pamt{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.75rem;font-weight:800;letter-spacing:-2px;color:var(--text);}
+.pperiod{font-size:0.8rem;color:var(--text-3);margin-bottom:0.875rem;font-weight:500;}
+.pdesc{font-size:0.85rem;color:var(--text-2);line-height:1.6;padding-bottom:1.25rem;border-bottom:1px solid var(--border);margin-bottom:1.25rem;}
+.pfeats{list-style:none;margin-bottom:1.75rem;}
+.pfeats li{font-size:0.85rem;color:var(--text-2);padding:0.3rem 0;display:flex;gap:0.6rem;align-items:flex-start;line-height:1.5;}
+.ck{color:var(--emerald);flex-shrink:0;font-weight:700;}
+.pbtn{width:100%;padding:0.7rem;border-radius:7px;font-size:0.875rem;font-weight:600;cursor:pointer;transition:all 0.18s;font-family:'Plus Jakarta Sans',sans-serif;}
+.pbtn-d{background:var(--surface2);color:var(--text);border:1px solid var(--border-md);}
+.pbtn-d:hover{background:var(--surface3);border-color:var(--border-hi);}
+.pbtn-f{background:var(--indigo);color:#fff;border:none;}
+.pbtn-f:hover{background:#4f52d4;box-shadow:0 4px 18px var(--indigo-glow);}
+.ppicker{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:0.875rem;}
+.popt{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:0.75rem 0.5rem;text-align:center;cursor:pointer;transition:all 0.14s;}
+.popt:hover,.popt.sel{border-color:var(--indigo);background:var(--indigo-dim);}
+.popt-n{font-size:0.78rem;font-weight:600;color:var(--text-2);margin-bottom:0.15rem;}
+.popt-p{font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;font-weight:800;color:var(--indigo);}
+.qrow{display:flex;justify-content:space-between;align-items:center;margin-top:0.625rem;}
+.qtxt{font-size:0.7rem;color:var(--text-4);font-family:'JetBrains Mono',monospace;}
+.qbar{height:3px;background:var(--surface4);border-radius:99px;margin-top:0.35rem;overflow:hidden;}
+.qbar-fill{height:100%;background:var(--indigo);border-radius:99px;transition:width 0.3s;}
+
+/* ─── CTA ─── */
+.cta-sec{padding:5rem 1.5rem;text-align:center;border-top:1px solid var(--border);}
+.cta-sec h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;letter-spacing:-1px;margin-bottom:0.75rem;}
+.cta-sec p{font-size:0.9rem;color:var(--text-2);margin-bottom:2rem;}
+
+/* ─── APP SHELL ─── */
+#dashboard{background:var(--bg);}
+.shell{display:grid;grid-template-columns:236px 1fr;min-height:calc(100vh - 60px);}
+
+/* SIDEBAR */
+.sb{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:0.875rem 0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.sb-grp-lbl{padding:0.75rem 1rem 0.25rem;font-size:0.65rem;font-weight:600;color:var(--text-4);letter-spacing:0.09em;text-transform:uppercase;}
+.si{display:flex;align-items:center;gap:0.625rem;padding:0.475rem 0.875rem;margin:0 0.5rem;border-radius:7px;font-size:0.875rem;font-weight:500;color:var(--text-2);cursor:pointer;transition:all 0.12s;border:none;background:transparent;width:calc(100% - 1rem);text-align:left;}
+.si:hover{color:var(--text);background:var(--surface2);}
+.si.on{color:var(--text);background:var(--surface3);}
+.si svg{flex-shrink:0;opacity:0.65;}
+.si.on svg{opacity:1;}
+.si span{flex:1;}
+.si-badge{font-size:0.63rem;font-weight:700;background:var(--indigo-dim);color:var(--indigo);border-radius:999px;padding:0.1rem 0.45rem;}
+.sb-footer{margin-top:auto;padding:0.875rem;border-top:1px solid var(--border);}
+.qcard{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.875rem;}
+.qcard-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;}
+.qcard-lbl{font-size:0.68rem;font-weight:600;color:var(--text-4);}
+.qcard-vals{font-size:0.68rem;font-family:'JetBrains Mono',monospace;color:var(--text-2);}
+.qtrack{height:3.5px;background:var(--surface4);border-radius:99px;overflow:hidden;}
+.qfill{height:100%;background:var(--indigo);border-radius:99px;transition:width 0.4s;}
+.qsub{font-size:0.68rem;color:var(--text-4);margin-top:0.35rem;}
+
+/* MAIN */
+.main{padding:1.75rem 2rem;overflow-y:auto;}
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.75rem;gap:1rem;}
+.ph-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:-0.4px;}
+.ph-sub{font-size:0.84rem;color:var(--text-2);margin-top:2px;}
+.btn-act{display:inline-flex;align-items:center;gap:5px;padding:0.55rem 1rem;border-radius:7px;font-size:0.84rem;font-weight:600;background:var(--indigo);color:#fff;border:none;cursor:pointer;transition:all 0.15s;white-space:nowrap;flex-shrink:0;}
+.btn-act:hover{background:#4f52d4;}
+
+/* METRICS */
+.mets{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+.met{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;}
+.met-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;}
+.met-name{font-size:0.7rem;font-weight:600;color:var(--text-3);letter-spacing:0.04em;}
+.met-ico{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;}
+.met-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.875rem;font-weight:800;letter-spacing:-1px;line-height:1;}
+.met-d{font-size:0.74rem;font-weight:500;margin-top:0.35rem;display:flex;align-items:center;gap:3px;}
+.d-up{color:var(--emerald);}
+.d-neu{color:var(--text-3);}
+
+/* DASH GRID */
+.dbody{display:grid;grid-template-columns:1fr 310px;gap:1.25rem;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;}
+.card-h{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.25rem;border-bottom:1px solid var(--border);}
+.card-title{font-size:0.78rem;font-weight:600;color:var(--text-2);}
+.card-b{padding:0 1.25rem;}
+
+/* TABLE */
+.dt{width:100%;border-collapse:collapse;font-size:0.85rem;}
+.dt th{text-align:left;padding:0.7rem 0;font-size:0.68rem;font-weight:600;color:var(--text-4);letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.dt td{padding:0.875rem 0;border-bottom:1px solid var(--border);color:var(--text-2);vertical-align:middle;}
+.dt tr:last-child td{border-bottom:none;}
+.dt tr:hover td{background:rgba(255,255,255,0.01);}
+.cp{color:var(--text);font-weight:500;}
+.cs{color:var(--text-3);font-size:0.74rem;margin-top:2px;}
+.schip{display:inline-flex;align-items:center;justify-content:center;width:33px;height:20px;border-radius:5px;font-size:0.69rem;font-weight:700;font-family:'JetBrains Mono',monospace;}
+.shi{background:rgba(16,185,129,0.12);color:var(--emerald);}
+.shm{background:rgba(245,158,11,0.12);color:var(--amber);}
+.shl{background:rgba(244,63,94,0.12);color:var(--rose);}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:0.7rem;font-weight:500;padding:0.175rem 0.575rem;border-radius:999px;}
+.p-new{background:rgba(99,102,241,0.12);color:#a5b4fc;}
+.p-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* ACTIVITY */
+.al{padding:0.25rem 0;}
+.ai{display:flex;gap:0.75rem;padding:0.875rem 0;border-bottom:1px solid var(--border);}
+.ai:last-child{border-bottom:none;}
+.adot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.abody{flex:1;}
+.atxt{font-size:0.825rem;color:var(--text-2);line-height:1.5;}
+.atime{font-size:0.69rem;color:var(--text-4);font-family:'JetBrains Mono',monospace;margin-top:2px;}
+
+/* ─── FINDER ─── */
+#finder{background:var(--bg);}
+.fshell{display:grid;grid-template-columns:375px 1fr;min-height:calc(100vh - 60px);}
+.ppanel{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;height:calc(100vh - 60px);position:sticky;top:60px;overflow-y:auto;}
+.pp-top{padding:1.5rem 1.5rem 1rem;}
+.pp-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.05rem;margin-bottom:0.25rem;}
+.pp-sub{font-size:0.8rem;color:var(--text-3);line-height:1.6;}
+.pp-body{padding:0 1.25rem;flex:1;}
+.psec-lbl{display:flex;align-items:center;gap:0.5rem;padding:0.875rem 0 0.5rem;font-size:0.68rem;font-weight:700;color:var(--text-4);letter-spacing:0.08em;text-transform:uppercase;border-top:1px solid var(--border);margin-top:0.375rem;}
+.psec-lbl:first-of-type{border-top:none;margin-top:0;padding-top:0.25rem;}
+.field{margin-bottom:0.875rem;}
+.field-2{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.lbl{display:block;font-size:0.74rem;font-weight:600;color:var(--text-2);margin-bottom:0.35rem;}
+.inp{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:0.57rem 0.75rem;color:var(--text);font-size:0.875rem;outline:none;transition:border-color 0.14s,box-shadow 0.14s;}
+.inp:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(99,102,241,0.12);}
+.inp::placeholder{color:var(--text-4);}
+select.inp{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2352525b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+textarea.inp{resize:vertical;min-height:70px;line-height:1.55;}
+.twrap{display:flex;flex-wrap:wrap;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:6px;min-height:40px;transition:border-color 0.14s,box-shadow 0.14s;}
+.twrap:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(99,102,241,0.12);}
+.tchip{display:inline-flex;align-items:center;gap:3px;background:var(--indigo-dim);border:1px solid rgba(99,102,241,0.22);color:#a5b4fc;border-radius:4px;padding:2px 7px;font-size:0.74rem;font-weight:500;}
+.tx{cursor:pointer;opacity:0.6;font-size:1rem;line-height:1;}
+.tx:hover{opacity:1;}
+.tfi{background:transparent;border:none;outline:none;color:var(--text);font-size:0.8rem;min-width:60px;flex:1;}
+.hint{font-size:0.69rem;color:var(--text-4);margin-top:4px;}
+.range-wrap{display:flex;align-items:center;gap:0.75rem;}
+input[type=range]{flex:1;accent-color:var(--indigo);height:4px;cursor:pointer;background:var(--surface4);}
+.rval{font-family:'JetBrains Mono',monospace;font-size:0.8rem;font-weight:500;color:var(--indigo);min-width:24px;text-align:right;}
+.pp-footer{padding:1.125rem;border-top:1px solid var(--border);flex-shrink:0;}
+.genbtn{width:100%;padding:0.8rem;border-radius:7px;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;font-weight:700;background:var(--indigo);color:#fff;border:none;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.genbtn:hover{background:#4f52d4;box-shadow:0 4px 20px var(--indigo-glow);}
+.genbtn:disabled{opacity:0.5;cursor:not-allowed;box-shadow:none;}
+.qrow{display:flex;justify-content:space-between;align-items:center;margin-top:0.625rem;}
+.qtxt{font-size:0.7rem;color:var(--text-4);font-family:'JetBrains Mono',monospace;}
+.qbar{height:3px;background:var(--surface4);border-radius:99px;margin-top:0.35rem;overflow:hidden;}
+.qbar-fill{height:100%;background:var(--indigo);border-radius:99px;transition:width 0.3s;}
+
+/* RESULTS */
+.rpanel{padding:1.75rem;overflow-y:auto;}
+.rtoolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem;}
+.rh{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.05rem;}
+.rs{font-size:0.8rem;color:var(--text-3);margin-top:2px;}
+.tbr{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.btool{display:inline-flex;align-items:center;gap:4px;padding:0.4rem 0.75rem;border-radius:6px;font-size:0.8rem;font-weight:500;color:var(--text-2);background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:all 0.14s;}
+.btool:hover{color:var(--text);border-color:var(--border-md);background:var(--surface2);}
+.fstrip{display:flex;gap:0.375rem;margin-bottom:1.25rem;flex-wrap:wrap;}
+.fb{padding:0.35rem 0.75rem;border-radius:6px;font-size:0.8rem;font-weight:500;color:var(--text-3);background:transparent;border:1px solid var(--border);cursor:pointer;transition:all 0.14s;}
+.fb:hover,.fb.on{color:var(--indigo);background:var(--indigo-dim);border-color:rgba(99,102,241,0.28);}
+
+/* LEAD CARDS */
+.lcards{display:flex;flex-direction:column;gap:0.625rem;}
+.lc{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem;display:flex;align-items:flex-start;gap:0.875rem;cursor:pointer;transition:all 0.14s;}
+.lc:hover{border-color:var(--border-md);background:var(--surface2);transform:translateX(2px);}
+.lc-av{width:42px;height:42px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;}
+.lc-body{flex:1;min-width:0;}
+.lc-name{font-weight:600;font-size:0.9rem;color:var(--text);}
+.lc-role{font-size:0.8rem;color:var(--text-2);margin-top:1px;}
+.lc-co{font-size:0.74rem;color:var(--text-3);margin-top:2px;font-family:'JetBrains Mono',monospace;}
+.lc-pain{font-size:0.74rem;color:var(--text-3);margin-top:0.5rem;line-height:1.5;}
+.lc-tags{display:flex;gap:4px;margin-top:0.5rem;flex-wrap:wrap;}
+.ltag{font-size:0.64rem;font-weight:500;padding:2px 7px;border-radius:4px;}
+.lc-r{flex-shrink:0;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:0.35rem;}
+.lc-score{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.625rem;font-weight:800;letter-spacing:-1px;line-height:1;}
+.lc-slbl{font-size:0.59rem;font-weight:600;color:var(--text-4);letter-spacing:0.06em;text-transform:uppercase;}
+.lc-cbns{display:flex;flex-direction:column;gap:3px;margin-top:0.4rem;}
+.lcbtn{font-size:0.7rem;font-weight:500;color:var(--indigo);background:var(--indigo-dim);border-radius:4px;padding:2px 7px;border:none;cursor:pointer;transition:all 0.12s;}
+.lcbtn:hover{background:rgba(99,102,241,0.22);}
+
+/* EMPTY / LOADING */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:420px;text-align:center;gap:0.875rem;}
+.empty-ico{font-size:2.25rem;opacity:0.2;}
+.empty-h{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1rem;color:var(--text-2);}
+.empty-p{font-size:0.84rem;color:var(--text-3);max-width:250px;line-height:1.65;}
+.spin{width:34px;height:34px;border:2.5px solid var(--surface4);border-top-color:var(--indigo);border-radius:50%;animation:sp 0.7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* ─── MODAL ─── */
+.mbg{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:1rem;}
+.mbg.open{display:flex;}
+.mbox{background:var(--surface);border:1px solid var(--border-md);border-radius:18px;padding:2rem;width:100%;max-width:420px;animation:min 0.2s ease;}
+@keyframes min{from{transform:scale(0.97) translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.mlogo{display:flex;align-items:center;gap:7px;margin-bottom:1.5rem;}
+.mlogo-mark{width:24px;height:24px;background:var(--indigo);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;}
+.mlogo-n{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1rem;}
+.mh{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.45rem;letter-spacing:-0.5px;margin-bottom:0.3rem;}
+.msub{font-size:0.84rem;color:var(--text-2);margin-bottom:1.75rem;}
+.mf{margin-bottom:0.875rem;}
+.mf label{display:block;font-size:0.74rem;font-weight:600;color:var(--text-2);margin-bottom:0.35rem;}
+.minp{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:0.65rem 0.875rem;color:var(--text);font-size:0.9rem;outline:none;transition:all 0.14s;}
+.minp:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(99,102,241,0.15);}
+.mbtn{width:100%;padding:0.8rem;border-radius:7px;font-size:0.9rem;font-weight:700;background:var(--indigo);color:#fff;border:none;cursor:pointer;transition:all 0.18s;margin-top:0.25rem;font-family:'Plus Jakarta Sans',sans-serif;}
+.mbtn:hover{background:#4f52d4;box-shadow:0 4px 18px var(--indigo-glow);}
+.msw{text-align:center;margin-top:1rem;font-size:0.8rem;color:var(--text-2);}
+.msw a{color:var(--indigo);cursor:pointer;font-weight:600;}
+.demo-info{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:1.25rem;font-size:0.85rem;color:var(--text-2);line-height:1.7;}
+
+/* ─── TOAST ─── */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;background:var(--surface2);border:1px solid var(--border-md);border-radius:10px;padding:0.75rem 1rem;display:none;align-items:center;gap:0.75rem;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,0.45);animation:tin 0.22s ease;}
+@keyframes tin{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.toast.show{display:flex;}
+.ticon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;}
+.tmsg{font-size:0.875rem;font-weight:500;color:var(--text);}
+
+@media(max-width:920px){
+  .shell,.fshell{grid-template-columns:1fr;}
+  .sb{display:none;}
+  .dbody{grid-template-columns:1fr;}
+  .mets{grid-template-columns:1fr 1fr;}
+  .plans{grid-template-columns:1fr;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .stat{border-right:none;border-bottom:1px solid var(--border);}
+  .feat-grid{grid-template-columns:1fr;}
+  .ftile.wide{grid-column:span 1;}
+  .ppanel{height:auto;position:static;}
+}
+@media(max-width:600px){
+  .hero h1{letter-spacing:-1px;}
+  .nav-links{display:none;}
+  .mets{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="showPage('landing');updateNav(false)">
+    <div class="logo-mark">L</div>
+    <span class="logo-name">LeadForge</span>
+  </div>
+  <div class="nav-links" id="nav-pub-links">
+    <button class="nav-link" onclick="scrollToId('features')">Recursos</button>
+    <button class="nav-link" onclick="scrollToId('pricing-bg')">Preços</button>
+  </div>
+  <div class="nav-r" id="nav-pub-r">
+    <button class="btn-ghost" onclick="openModal('login')">Entrar</button>
+    <button class="btn-cta" onclick="openModal('register')">Criar conta</button>
+  </div>
+  <div class="nav-user" id="nav-user">
+    <span class="nav-email-txt" id="nav-em"></span>
+    <div class="nav-av" id="nav-av"></div>
+    <button class="btn-out" onclick="logout()">Sair</button>
+  </div>
+</nav>
+
+<!-- ══ LANDING ══ -->
+<div class="page active" id="landing">
+
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-badge"><span class="bdot"></span>Inteligência Artificial · <strong style="color:var(--text);font-weight:600">12.4k leads gerados hoje</strong></div>
+    <h1>Prospecção inteligente<br><span class="grad">para qualquer nicho</span></h1>
+    <p class="hero-sub">Configure seu ICP e deixe a IA encontrar, qualificar e organizar os melhores leads — em segundos, para qualquer mercado.</p>
+    <div class="hero-btns">
+      <button class="btn-p" onclick="openModal('register')">Criar conta agora <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7.5 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="btn-o" onclick="openModal('demo')">Ver demo ao vivo</button>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-i"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="var(--emerald)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Acesso imediato</div>
+      <div class="trust-i"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="var(--emerald)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Inteligência Artificial</div>
+      <div class="trust-i"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="var(--emerald)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Qualquer nicho</div>
+    </div>
+  </div>
+
+  <div class="logos">
+    <p>Confiado por equipes de vendas em todo o Brasil</p>
+    <div class="logos-row">
+      <span class="logo-co">Growtech</span><span class="logo-co">SalesHub</span><span class="logo-co">Vendaza</span><span class="logo-co">ClinicaPro</span><span class="logo-co">BuildSales</span><span class="logo-co">FinLead</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-n">+<span class="ac">12k</span></div><div class="stat-l">Leads gerados por dia</div></div>
+    <div class="stat"><div class="stat-n"><span class="ac">94</span>%</div><div class="stat-l">Taxa de qualificação média</div></div>
+    <div class="stat"><div class="stat-n">+<span class="ac">430</span></div><div class="stat-l">Nichos atendidos</div></div>
+    <div class="stat"><div class="stat-n"><span class="ac">3×</span></div><div class="stat-l">Mais conversão vs. manual</div></div>
+  </div>
+
+  <div class="sec" id="features">
+    <div class="sec-eye">Recursos</div>
+    <div class="sec-h">Tudo que você precisa para<br>prospectar em escala</div>
+    <div class="sec-p">Do primeiro filtro até o lead qualificado — a pipeline inteira automatizada com IA.</div>
+    <div class="feat-grid">
+      <div class="ftile"><div class="ficon" style="background:var(--indigo-dim)">🎯</div><div class="fh">Parâmetros personalizados</div><div class="fp">Defina nicho, cargo, localização, tamanho, dores e faturamento. A IA adapta cada busca ao seu mercado específico.</div></div>
+      <div class="ftile"><div class="ficon" style="background:var(--emerald-dim)">⚡</div><div class="fh">Score de qualificação IA</div><div class="fp">Cada lead recebe uma pontuação de 0–100 baseada no seu ICP configurado, com raciocínio detalhado.</div></div>
+      <div class="ftile"><div class="ficon" style="background:var(--amber-dim)">📊</div><div class="fh">Dashboard em tempo real</div><div class="fp">Acompanhe métricas da sua pipeline, taxa de conversão por campanha e evolução dos leads — tudo atualizado.</div></div>
+      <div class="ftile"><div class="ficon" style="background:var(--rose-dim)">🔌</div><div class="fh">Exportação e integrações</div><div class="fp">Exporte em CSV ou JSON. Integre via webhook com HubSpot, Pipedrive, RD Station e qualquer CRM.</div></div>
+      <div class="ftile wide"><div class="ficon" style="background:rgba(6,182,212,0.1)">🔄</div><div class="fh">Buscas recorrentes automatizadas</div><div class="fp">Configure campanhas que rodam diariamente ou semanalmente e alimentam sua pipeline de forma contínua. Combine múltiplos parâmetros e segmentações diferentes por campanha — sem intervenção manual.</div></div>
+    </div>
+  </div>
+
+
+  <div class="pricing-bg" id="pricing-bg">
+    <div class="pricing-in">
+      <div class="sec-eye">Planos</div>
+      <div class="sec-h">Simples, transparente, sem surpresas</div>
+      <div class="sec-p">Comece grátis por 14 dias. Nenhum cartão de crédito necessário.</div>
+      <div class="tog-row">
+        <div class="tog-track" id="btog" onclick="toggleBilling(this)"><div class="tog-thumb"></div></div>
+        <span class="tog-label">Cobrança anual</span>
+        <span class="tog-save">Economize 20%</span>
+      </div>
+      <div class="plans">
+        <div class="pcard">
+          <div class="pname">Starter</div>
+          <div class="pprice"><span class="pcur">R$</span><span class="pamt" data-m="97" data-a="78">97</span></div>
+          <div class="pperiod">por mês</div>
+          <div class="pdesc">Para profissionais e pequenas equipes começando com prospecção digital.</div>
+          <ul class="pfeats">
+            <li><span class="ck">✓</span>500 leads por mês</li>
+            <li><span class="ck">✓</span>3 campanhas ativas</li>
+            <li><span class="ck">✓</span>Score de qualificação IA</li>
+            <li><span class="ck">✓</span>Exportação CSV</li>
+            <li><span class="ck">✓</span>Suporte por e-mail</li>
+          </ul>
+          <button class="pbtn pbtn-d" onclick="openModal('register')">Começar grátis</button>
+        </div>
+        <div class="pcard feat">
+          <div class="pbadge">Mais popular</div>
+          <div class="pname">Growth</div>
+          <div class="pprice"><span class="pcur">R$</span><span class="pamt" data-m="297" data-a="238">297</span></div>
+          <div class="pperiod">por mês</div>
+          <div class="pdesc">Para equipes de vendas que precisam de volume, automação e integrações completas.</div>
+          <ul class="pfeats">
+            <li><span class="ck">✓</span>3.000 leads por mês</li>
+            <li><span class="ck">✓</span>Campanhas ilimitadas</li>
+            <li><span class="ck">✓</span>Score avançado + ICP Builder</li>
+            <li><span class="ck">✓</span>Exportação CSV + JSON</li>
+            <li><span class="ck">✓</span>Buscas automáticas recorrentes</li>
+            <li><span class="ck">✓</span>Integração CRM via webhook</li>
+            <li><span class="ck">✓</span>Suporte prioritário</li>
+          </ul>
+          <button class="pbtn pbtn-f" onclick="openModal('register')">Começar grátis 14 dias</button>
+        </div>
+        <div class="pcard">
+          <div class="pname">Scale</div>
+          <div class="pprice"><span class="pcur">R$</span><span class="pamt" data-m="897" data-a="718">897</span></div>
+          <div class="pperiod">por mês</div>
+          <div class="pdesc">Para operações de vendas de alto volume com necessidades avançadas.</div>
+          <ul class="pfeats">
+            <li><span class="ck">✓</span>15.000 leads por mês</li>
+            <li><span class="ck">✓</span>Campanhas ilimitadas</li>
+            <li><span class="ck">✓</span>Multi-usuário (até 10 acessos)</li>
+            <li><span class="ck">✓</span>API REST completa</li>
+            <li><span class="ck">✓</span>Integração nativa CRM</li>
+            <li><span class="ck">✓</span>Gerente de conta dedicado</li>
+            <li><span class="ck">✓</span>SLA garantido</li>
+          </ul>
+          <button class="pbtn pbtn-d" onclick="openModal('register')">Falar com vendas</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-sec">
+    <h2>Pronto para escalar sua<br><span class="grad">prospecção com IA?</span></h2>
+    <p>Crie sua conta e comece a gerar leads qualificados agora mesmo.</p>
+    <button class="btn-p" onclick="openModal('register')">Criar conta agora <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7.5 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div class="page" id="dashboard">
+  <div class="shell">
+    <aside class="sb">
+      <div class="sb-grp">
+        <button class="si on" onclick="actSide(this,'home')">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="1" width="5.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="8.5" width="5.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="8.5" y="1" width="5.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="8.5" y="8.5" width="5.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/></svg>
+          <span>Dashboard</span>
+        </button>
+        <button class="si" onclick="goFinder()">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M10 10L13.5 13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span>Buscar Leads</span>
+        </button>
+        <button class="si" onclick="actSide(this,'campaigns')">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="13" height="10" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 6.5h13" stroke="currentColor" stroke-width="1.3"/></svg>
+          <span>Campanhas</span><span class="si-badge">3</span>
+        </button>
+        <button class="si" onclick="actSide(this,'myleads')">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 12.5c0-2.761 2.239-5 5-5s5 2.239 5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span>Meus Leads</span>
+        </button>
+      </div>
+      <div class="sb-grp" style="margin-top:0.5rem;">
+        <div class="sb-grp-lbl">Configurações</div>
+        <button class="si" onclick="actSide(this,'icp')">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1.5L9 5H13L9.5 8L11 12.5L7.5 10L4 12.5L5.5 8L2 5H6L7.5 1.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          <span>Perfil ICP</span>
+        </button>
+        <button class="si" onclick="actSide(this,'int')">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="3" cy="7.5" r="2" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="3" r="2" stroke="currentColor" stroke-width="1.3"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 7.5h2.5M7.5 7.5L10 3M7.5 7.5L10 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <span>Integrações</span>
+        </button>
+        <button class="si" onclick="actSide(this,'billing')">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><rect x="1" y="3.5" width="13" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M1 6.5h13" stroke="currentColor" stroke-width="1.3"/></svg>
+          <span>Assinatura</span>
+        </button>
+      </div>
+      <div class="sb-footer">
+        <div class="qcard">
+          <div class="qcard-head"><span class="qcard-lbl">Cota mensal</span><span class="qcard-vals" id="sq-v">0 / 3.000</span></div>
+          <div class="qtrack"><div class="qfill" id="sq-f" style="width:0%"></div></div>
+          <div class="qsub" id="sq-p">Plano Growth</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="ph">
+        <div><div class="ph-title" id="d-greet">Bom dia 👋</div><div class="ph-sub">Resumo da sua prospecção de hoje</div></div>
+        <button class="btn-act" onclick="goFinder()"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Nova busca</button>
+      </div>
+
+      <div class="mets">
+        <div class="met"><div class="met-top"><span class="met-name">LEADS GERADOS</span><div class="met-ico" style="background:var(--indigo-dim)">🎯</div></div><div class="met-val" id="m-tot">0</div><div class="met-d d-up">↑ 0 essa semana</div></div>
+        <div class="met"><div class="met-top"><span class="met-name">QUALIFICADOS</span><div class="met-ico" style="background:var(--emerald-dim)">✅</div></div><div class="met-val" id="m-q">0</div><div class="met-d d-neu">Score ≥ 70</div></div>
+        <div class="met"><div class="met-top"><span class="met-name">CAMPANHAS</span><div class="met-ico" style="background:var(--amber-dim)">📋</div></div><div class="met-val" id="m-c">1</div><div class="met-d d-neu">ativas</div></div>
+        <div class="met"><div class="met-top"><span class="met-name">COTA USADA</span><div class="met-ico" style="background:var(--rose-dim)">📊</div></div><div class="met-val" id="m-p">0%</div><div class="met-d d-neu" id="m-ps">de 3.000 leads</div></div>
+      </div>
+
+      <div class="dbody">
+        <div class="card">
+          <div class="card-h"><span class="card-title">Leads recentes</span><button class="btool" onclick="goFinder()">Ver todos →</button></div>
+          <div class="card-b" id="rec-table"><div style="padding:2rem 0;text-align:center;color:var(--text-3);font-size:0.84rem;">Nenhum lead ainda. <a href="#" onclick="goFinder()" style="color:var(--indigo);font-weight:600;text-decoration:none">Fazer primeira busca →</a></div></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><span class="card-title">Atividade recente</span></div>
+          <div class="card-b"><div class="al" id="act-list"><div style="padding:1.5rem 0;text-align:center;color:var(--text-4);font-size:0.8rem;">Sem atividade ainda</div></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ══ FINDER ══ -->
+<div class="page" id="finder">
+  <div class="fshell">
+    <aside class="ppanel">
+      <div class="pp-top">
+        <div class="pp-title">Buscar Leads com IA</div>
+        <div class="pp-sub">Configure o perfil do lead ideal e gere uma lista qualificada em segundos.</div>
+      </div>
+      <div class="pp-body">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(99,102,241,0.07);border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:0.75rem 1rem;margin-bottom:0.5rem;">
+          <div>
+            <div style="font-size:0.8rem;font-weight:600;color:var(--text);">🧪 Modo Teste</div>
+            <div style="font-size:0.7rem;color:var(--text-3);margin-top:2px;">Busca no banco local · sem API</div>
+          </div>
+          <div class="tog-track" id="test-mode-tog" style="flex-shrink:0" onclick="toggleTestMode(this)">
+            <div class="tog-thumb"></div>
+          </div>
+        </div>
+
+        <div class="psec-lbl">Público-alvo</div>
+        <div class="field">
+          <label class="lbl">Nicho / Setor <span style="color:var(--rose)">*</span></label>
+          <input class="inp" id="f-niche" placeholder="ex: SaaS B2B, Clínicas de Estética, Construtoras…"/>
+        </div>
+        <div class="field">
+          <label class="lbl">Cargo / Função do decisor</label>
+          <div class="twrap" id="cargo-wrap"><input class="tfi" id="cargo-fi" placeholder="CEO, Diretor… (Enter para adicionar)" onkeydown="addTag(event)"/></div>
+          <div class="hint">Pressione Enter para adicionar cada cargo</div>
+        </div>
+        <div class="field-2">
+          <div class="field"><label class="lbl">Localização</label><input class="inp" id="f-loc" placeholder="São Paulo, Brasil…"/></div>
+          <div class="field"><label class="lbl">Tamanho da empresa</label>
+            <select class="inp" id="f-sz"><option value="">Qualquer</option><option value="micro">Micro (1–10)</option><option value="pequena">Pequena (11–50)</option><option value="media">Média (51–200)</option><option value="grande">Grande (201–1k)</option><option value="enterprise">Enterprise (1k+)</option></select>
+          </div>
+        </div>
+        <div class="field"><label class="lbl">Faturamento estimado</label>
+          <select class="inp" id="f-rev"><option value="">Qualquer</option><option value="ate500k">Até R$ 500k/ano</option><option value="500k-2m">R$ 500k – R$ 2M</option><option value="2m-10m">R$ 2M – R$ 10M</option><option value="10m+">Acima de R$ 10M</option></select>
+        </div>
+        <div class="psec-lbl">Qualificação</div>
+        <div class="field"><label class="lbl">Dores / Problemas do cliente</label><textarea class="inp" id="f-pain" placeholder="Descreva as principais dores que seu produto resolve…"></textarea></div>
+        <div class="field"><label class="lbl">Critérios adicionais</label><textarea class="inp" id="f-extra" placeholder="Tecnologias usadas, certificações, público-alvo específico…" style="min-height:60px;"></textarea></div>
+        <div class="psec-lbl">Parâmetros da busca</div>
+        <div class="field">
+          <label class="lbl">Quantidade de leads — <span id="qty-v" style="color:var(--indigo);font-family:'JetBrains Mono',monospace">10</span></label>
+          <input type="range" id="f-qty" min="5" max="50" value="10" oninput="document.getElementById('qty-v').textContent=this.value"/>
+        </div>
+        <div class="field" style="margin-bottom:0.25rem;">
+          <label class="lbl">Score mínimo (0–100) — <span id="score-v" style="color:var(--indigo);font-family:'JetBrains Mono',monospace">60</span></label>
+          <input type="range" id="f-score" min="0" max="100" value="60" oninput="document.getElementById('score-v').textContent=this.value"/>
+        </div>
+      </div>
+      <div class="pp-footer">
+        <button class="genbtn" id="gen-btn" onclick="generateLeads()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.5 5H12.5L9.25 7.25L10.5 12L7 9.75L3.5 12L4.75 7.25L1.5 5H5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+          Gerar Leads com IA
+        </button>
+        <div class="qrow"><span class="qtxt" id="q-used">0 / 3.000 usados</span><span class="qtxt" id="q-plan">Plano Growth</span></div>
+        <div class="qbar"><div class="qbar-fill" id="q-fill" style="width:0%"></div></div>
+      </div>
+    </aside>
+
+    <section class="rpanel">
+      <div class="rtoolbar">
+        <div><div class="rh">Resultados</div><div class="rs" id="res-sub">Configure os parâmetros e clique em Gerar</div></div>
+        <div class="tbr" id="exp-row" style="display:none">
+          <button class="btool" onclick="exportCSV()">↓ Exportar CSV</button>
+          <button class="btool" onclick="exportJSON()">↓ Exportar JSON</button>
+        </div>
+      </div>
+      <div class="fstrip" id="fstrip" style="display:none">
+        <button class="fb on" onclick="filterL('all',this)">Todos</button>
+        <button class="fb" onclick="filterL('hi',this)">Score alto ≥ 80</button>
+        <button class="fb" onclick="filterL('md',this)">Médio 60–79</button>
+        <button class="fb" onclick="filterL('lo',this)">Baixo &lt; 60</button>
+      </div>
+      <div id="leads-out">
+        <div class="empty"><div class="empty-ico">🎯</div><div class="empty-h">Nenhum lead ainda</div><div class="empty-p">Configure os parâmetros no painel esquerdo e clique em "Gerar Leads com IA".</div></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="mbg" id="mbg" onclick="closeMOut(event)"><div class="mbox" id="mbox"></div></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="ticon" id="ticon">✓</div><span class="tmsg" id="tmsg"></span></div>
+
+<script>
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LEADFORGE — BANCO DINÂMICO DE LEADS BRASIL
+   1.000 leads por setor · 15 setores · 15.000 leads totais
+   Fontes de referência: Receita Federal · Econodata · Speedio ·
+   CNPJ Data · IBGE · Sebrae · Leads2b · ABComm · CNI · ABRH
+════════════════════════════════════════════════════════════════ */
+
+// ── Nomes brasileiros ────────────────────────────────────────────────
+const _FN=['Ana','Bruno','Carlos','Daniela','Eduardo','Fernanda','Gustavo','Helena',
+  'Igor','Juliana','Kleber','Leticia','Marcelo','Natalia','Otavio','Patricia',
+  'Rafael','Sabrina','Thiago','Vanessa','Andre','Beatriz','Caio','Débora',
+  'Elisa','Fabio','Gabriela','Henrique','Isabela','Jonas','Karen','Leonardo',
+  'Mariana','Nicolas','Olivia','Paulo','Renata','Sergio','Tatiana','Ulisses',
+  'Vitoria','Wilson','Yasmin','Zeca','Adriana','Bernardo','Camila','Diego',
+  'Erica','Felipe','Giovanna','Heloisa','Iago','Jessica','Lucas','Mônica',
+  'Nadia','Osmar','Priya','Roberta','Silvia','Tomas','Ursula','Valdeci',
+  'Wanderson','Ximena','Yago','Zenaide','Alessandro','Bárbara','Claudio','Denise',
+  'Emerson','Flavia','Gerson','Humberto','Irene','Joao','Keila','Larissa',
+  'Mauricio','Neusa','Orlando','Pamela','Raimundo','Sandra','Talita','Ubiratan'];
+
+const _LN=['Silva','Santos','Oliveira','Souza','Rodrigues','Ferreira','Alves','Pereira',
+  'Lima','Gomes','Costa','Ribeiro','Martins','Carvalho','Almeida','Lopes','Sousa',
+  'Fernandes','Vieira','Barbosa','Rocha','Dias','Nascimento','Andrade','Moreira',
+  'Nunes','Marques','Machado','Mendes','Freitas','Cardoso','Ramos','Moraes','Araújo',
+  'Melo','Castro','Corrêa','Pinto','Teixeira','Monteiro','Cavalcante','Fonseca',
+  'Pinheiro','Campos','Azevedo','Borges','Tavares','Cunha','Rezende','Duarte',
+  'Miranda','Figueiredo','Brito','Xavier','Barros','Vasconcelos','Lacerda','Coelho',
+  'Neves','Magalhães','Guimarães','Queiroz','Menezes','Pires','Santana','Batista',
+  'Godoy','Teles','Braga','Pacheco','Silveira','Gomes','Nogueira','Arruda',
+  'Leite','Siqueira','Medeiros','Bezerra','Rios','Hoffmann','Krause','Weber'];
+
+// ── Cidades por região ───────────────────────────────────────────────
+const _CITIES={
+  sp:['São Paulo, SP','Campinas, SP','Ribeirão Preto, SP','Santos, SP','São José dos Campos, SP',
+      'Sorocaba, SP','Guarulhos, SP','Osasco, SP','São Bernardo do Campo, SP','Bauru, SP',
+      'Americana, SP','Piracicaba, SP','Jundiaí, SP','Franca, SP','Araraquara, SP'],
+  rj:['Rio de Janeiro, RJ','Niterói, RJ','Duque de Caxias, RJ','Nova Iguaçu, RJ','Campos dos Goytacazes, RJ'],
+  mg:['Belo Horizonte, MG','Uberlândia, MG','Contagem, MG','Juiz de Fora, MG','Montes Claros, MG'],
+  rs:['Porto Alegre, RS','Caxias do Sul, RS','Pelotas, RS','Canoas, RS','Passo Fundo, RS'],
+  pr:['Curitiba, PR','Londrina, PR','Maringá, PR','Ponta Grossa, PR','Cascavel, PR'],
+  sc:['Florianópolis, SC','Joinville, SC','Blumenau, SC','São José, SC','Chapecó, SC'],
+  ba:['Salvador, BA','Feira de Santana, BA','Vitória da Conquista, BA','Camaçari, BA','Ilhéus, BA'],
+  pe:['Recife, PE','Caruaru, PE','Petrolina, PE','Olinda, PE','Paulista, PE'],
+  ce:['Fortaleza, CE','Caucaia, CE','Juazeiro do Norte, CE','Sobral, CE','Maracanaú, CE'],
+  go:['Goiânia, GO','Aparecida de Goiânia, GO','Anápolis, GO','Rio Verde, GO','Senador Canedo, GO'],
+  df:['Brasília, DF','Taguatinga, DF','Ceilândia, DF','Sobradinho, DF','Gama, DF'],
+  mt:['Cuiabá, MT','Várzea Grande, MT','Rondonópolis, MT','Sinop, MT','Sorriso, MT'],
+  ms:['Campo Grande, MS','Dourados, MS','Três Lagoas, MS','Corumbá, MS'],
+  am:['Manaus, AM','Parintins, AM','Itacoatiara, AM'],
+  pa:['Belém, PA','Ananindeua, PA','Santarém, PA','Marabá, PA']
+};
+const _ALL_CITIES = Object.values(_CITIES).flat();
+
+// ── Dados por setor ──────────────────────────────────────────────────
+const SECTORS = {
+  'tecnologia':{
+    label:'Tecnologia / SaaS / TI',
+    keys:'tecnologia saas software ti startup erp crm sistema cloud devops cybersecurity ia inteligencia artificial automacao digital transformacao plataforma api dados analytics',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.rs,..._CITIES.sc,..._CITIES.pr],
+    industries:['Tecnologia','SaaS','Software','TI','EdTech','HRTech','MarTech','FinTech','LegalTech','AgriTech'],
+    titles:['CEO','CTO','Diretor de TI','Diretor de Produto','Head de Engenharia','VP de Tecnologia','Gerente de TI','Cofundador','CPO','Diretor Comercial'],
+    cos:['Tech','Systems','Digital','Software','Labs','Dev','Code','Data','Cloud','AI','Solutions','Plataforma','Hub','Studio','Works'],
+    prefixes:['Nexus','Sigma','Pulse','Core','Nova','Flux','Edge','Apex','Byte','Stack','Orbit','Qubit','Helix','Spark','Prism','Zenith','Cobalt','Vector','Nimbus','Cipher','Axon','Drift','Forge','Grid','Halo','Iris','Juno','Kite','Loop','Mesh'],
+    pains:['Dificuldade em escalar o time de vendas sem aumentar o CAC','Alto churn de clientes SaaS no 3º mês de uso','Falta de visibilidade do pipeline de vendas','Sistemas legados impedindo a transformação digital','Dificuldade em recrutar desenvolvedores seniores no Brasil','Processos manuais gerando retrabalho e erros operacionais','Baixa adoção do produto pelos usuários finais','Falta de dados estruturados para tomada de decisão','Vulnerabilidades de segurança em ambiente de nuvem','Integração complexa com sistemas ERP dos clientes'],
+    tags:[['SaaS','B2B','Scale-up'],['Cloud','Startup','Tech'],['BI','Analytics','Dados'],['Segurança','Cybersec','TI'],['API','Integração','Dev'],['IA','Machine Learning','Dados'],['ERP','Sistemas','Gestão'],['DevOps','Cloud','Automação'],['Produto','UX','Design'],['Mobile','App','Digital']]
+  },
+  'saude':{
+    label:'Saúde / Clínicas / Hospitais',
+    keys:'saude clinica hospital laboratorio medico farmacia odontologia dentista psicologia nutricao fisioterapia estetica medica telemedicina plano saude diagnostico cirurgia cardiologia ortopedia',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.rs,..._CITIES.df,..._CITIES.ba],
+    industries:['Saúde','Clínica Médica','Hospital','Laboratório','Odontologia','Psicologia','Nutrição','Fisioterapia','Telemedicina','Plano de Saúde'],
+    titles:['Diretor Médico','CEO','Administrador Hospitalar','Diretor Clínico','Coordenador Médico','Gestor de Saúde','Diretor de Operações','Gerente Geral','Sócio-Fundador','Diretor Administrativo'],
+    cos:['Saúde','Clínica','Med','Care','Vida','Bem Estar','Health','Médico','Centro','Instituto'],
+    prefixes:['Vida','São','Santa','Belo','Nova','Prime','Excel','Centro','Instituto','Grupo','Rede','Sistema','Clínica','Hospital','Espaço'],
+    pains:['Alto índice de no-show nas consultas agendadas','Dificuldade em fidelizar pacientes para retorno','Gestão de prontuários ainda em papel ou desorganizada','Falta de integração entre setores administrativo e clínico','Alta dependência de indicação para captar novos pacientes','Processos de agendamento ineficientes gerando fila','Custos operacionais acima da média do setor','Baixo ticket médio por consulta sem estratégia de upsell','Dificuldade em implementar telemedicina para o público idoso','Inadimplência de pacientes particulares acima de 15%'],
+    tags:[['Clínica','Saúde','Gestão'],['Hospital','Saúde','Operações'],['Laboratório','Diagnóstico','Saúde'],['Odontologia','Saúde','Rede'],['Psicologia','Saúde Mental','EAD'],['Nutrição','Wellness','Saúde'],['Telemedicina','HealthTech','Digital'],['Cardiologia','Especialidade','SP'],['Fisioterapia','Reabilitação','Saúde'],['Saúde Preventiva','Bem-estar','B2B']]
+  },
+  'construcao':{
+    label:'Construção Civil / Imobiliário',
+    keys:'construcao civil obra engenharia incorporadora imobiliaria imovel construtora arquitetura reforma empreiteira loteamento condominio residencial comercial habitacao incorporacao',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.pr,..._CITIES.go,..._CITIES.df,..._CITIES.ba,..._CITIES.ce],
+    industries:['Construção Civil','Incorporadora','Imobiliária','Engenharia','Arquitetura','Construtora','Loteamento','Reforma','Infraestrutura','Gestão de Obras'],
+    titles:['CEO','Diretor de Engenharia','Diretor Comercial','Sócio-Fundador','Gerente de Obras','Diretor Geral','Gerente Comercial','Coordenador de Projetos','Diretor de Incorporação','Arquiteto Sócio'],
+    cos:['Construções','Engenharia','Incorporações','Construtora','Empreendimentos','Imóveis','Obras','Projetos','Habitação','Incorporadora'],
+    prefixes:['Horizonte','Nova','Urban','Build','Prime','Mega','Terra','Gold','Sólido','Real','Viva','Pronto','Master','Top','Alfa'],
+    pains:['Gestão descentralizada de múltiplas obras simultâneas','Desperdício de materiais acima de 10% no canteiro','Dificuldade em manter prazos de entrega combinados','Falta de leads qualificados para lançamentos imobiliários','Alto custo financeiro por atraso na venda de unidades','Inadimplência dos compradores no crédito imobiliário próprio','Dificuldade em contratar mão de obra qualificada','Falta de rastreabilidade dos custos por obra','Processos de licença e aprovação municipal muito lentos','Concorrência de grandes incorporadoras pressionando preço'],
+    tags:[['Construção','Obras','SP'],['Incorporadora','Imobiliário','RJ'],['Engenharia','Projetos','PR'],['Construtora','Prazo','Gestão'],['Imobiliário','Vendas','Leads'],['Arquitetura','Design','Projetos'],['Loteamento','Terreno','Interior'],['Reforma','Retrofit','Corporativo'],['Infraestrutura','Governamental','Licitação'],['Condomínio','Gestão','Síndico']]
+  },
+  'agronegocio':{
+    label:'Agronegócio / AgroTech',
+    keys:'agronegocio agro agricultura fazenda soja milho cafe cana acucar pecuaria boi gado cooperativa insumos defensivo fertilizante irrigacao maquina agricola colheita plantio rastreabilidade agrotech',
+    cities:[..._CITIES.mt,..._CITIES.ms,..._CITIES.go,..._CITIES.pr,..._CITIES.rs,..._CITIES.sp.filter(c=>c.includes('Ribeirão')||c.includes('Bauru')),'Uberaba, MG','Uberlândia, MG','Londrina, PR','Cascavel, PR','Passo Fundo, RS','Sorriso, MT','Lucas do Rio Verde, MT','Rondonópolis, MT','Dourados, MS','Rio Verde, GO'],
+    industries:['Agronegócio','AgroTech','Cooperativa','Insumos Agrícolas','Pecuária','Horticultura','Cafeicultura','Cana-de-Açúcar','Logística Agrícola','Crédito Rural'],
+    titles:['Proprietário Rural','CEO','Diretor Comercial','Gerente Agrícola','Sócio-Fundador','Gerente de Logística','Diretor Técnico','Coordenador Agronômico','Gerente de Compras','Diretor de Operações'],
+    cos:['Agro','Rural','Campo','Colheita','Grãos','Pecuária','AgroTech','Fazenda','Cooperativa','Insumos'],
+    prefixes:['Boa','Verde','Ouro','Terra','Cerrado','Pampa','Pantanal','Cerrado','Celeiro','Gran','Agri','Campo','Sul','Norte','Centro'],
+    pains:['Falta de rastreabilidade da produção para certificação e exportação','Custo elevado de insumos importados comprimindo margem','Dificuldade em acessar crédito rural com taxas competitivas','Logística de escoamento da produção com custos altos','Perda pós-colheita acima da média por falta de infraestrutura','Falta de dados em tempo real sobre a lavoura','Dependência climática sem seguro agrícola adequado','Produtores sem acesso à tecnologia de precisão','Rastreabilidade do rebanho exigida pelos frigoríficos exportadores','Dificuldade em contratar técnicos agrícolas qualificados'],
+    tags:[['Soja','MT','Exportação'],['Pecuária','Boi','Rastreabilidade'],['AgroTech','Precisão','Drones'],['Cooperativa','Grãos','Logística'],['Insumos','Fertilizante','Defensivo'],['Cafeicultura','Café','Exportação'],['Cana','Etanol','Biocombustível'],['Crédito Rural','FinAgro','Banco'],['Irrigação','Tecnologia','Pivô'],['Milho','Armazenagem','Silo']]
+  },
+  'varejo':{
+    label:'Varejo / E-commerce',
+    keys:'varejo ecommerce loja online moda calcados eletronicos pet cosmetico beauty mercado supermercado atacado distribuidora marketplace shopee americanas mercadolivre shopify omnichannel d2c',
+    cities:_ALL_CITIES,
+    industries:['Varejo','E-commerce','Atacado','Distribuição','Moda','Eletrônicos','Varejo Pet','Cosméticos','Alimentar','Marketplace'],
+    titles:['CEO','Diretor Comercial','Gerente de E-commerce','Head de Marketing','Diretor de Operações','Gerente de Compras','Sócio-Fundador','Diretor de Expansão','Gerente de Marketplace','Head de Growth'],
+    cos:['Store','Shop','Market','Varejo','Moda','Casa','Life','Prime','Plus','Max','Center','Express','Online','Digital','Brasil'],
+    prefixes:['Fashion','Style','Top','Mega','Super','Ultra','Smart','Easy','Click','Fast','Best','Urban','Neon','Trend','Mix'],
+    pains:['Taxa de abandono de carrinho acima de 70% no e-commerce','CAC muito alto nos canais pagos sem ROAS positivo','Logística de última milha com alto índice de devoluções','Concorrência das grandes plataformas pressionando margem','Falta de fidelização de clientes para compras recorrentes','Gestão de estoque ineficiente gerando rupturas e excesso','Dificuldade em expandir para outros marketplaces','Experiência do cliente no pós-venda gerando avaliações negativas','Integração complexa entre estoque físico e digital','Fraude em meios de pagamento acima de 1%'],
+    tags:[['E-commerce','Omnichannel','B2C'],['Moda','D2C','Tendência'],['Marketplace','Shopee','Meli'],['Eletrônicos','Varejo','Tecnologia'],['Beleza','Skincare','Cosmético'],['Pet','Acessórios','Fidelização'],['Atacado','Distribuição','B2B'],['Supermercado','Alimentar','Reposição'],['Calçados','Moda','Fast Fashion'],['Móveis','Casa','Decoração']]
+  },
+  'educacao':{
+    label:'Educação / EdTech',
+    keys:'educacao escola faculdade universidade curso treinamento ead online evasao matricula aluno professor pedagogico corporativo b2b certificacao capacitacao aprendizagem plataforma edtech',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.rs,..._CITIES.pr,..._CITIES.pe,..._CITIES.ce,..._CITIES.ba,..._CITIES.go],
+    industries:['Educação','EdTech','EAD','Escola Básica','Faculdade','Treinamento Corporativo','Cursos Livres','Pós-Graduação','Escola de Idiomas','Plataforma de Ensino'],
+    titles:['Diretor Acadêmico','CEO','Diretor Pedagógico','Gerente de Matrículas','Head de Produto','Diretor Geral','Coordenador de EAD','Gerente Comercial','Sócio-Fundador','Diretor de Operações'],
+    cos:['Educação','Saber','Aprender','Escola','Instituto','Cursos','Academy','Learn','Edu','Futuro'],
+    prefixes:['Instituto','Escola','Centro','Academia','Colégio','Faculdade','Universidade','Curso','Saber','Mente'],
+    pains:['Alta taxa de evasão no 3° mês de curso online','Conversão de leads para matrículas abaixo de 5%','Dificuldade em engajar alunos na modalidade EAD','Concorrência de plataformas gratuitas reduzindo receita','Queda de matrículas por crise econômica das famílias','Empresas B2B sem fornecedor confiável de T&D','Regulatório MEC exigindo adequações custosas','Dificuldade em medir o ROI dos treinamentos corporativos','Falta de conteúdo atualizado para nichos específicos','Inadimplência de mensalidades acima de 12%'],
+    tags:[['EAD','Plataforma','Digital'],['Escola','Matrículas','Presencial'],['Corporativo','T&D','B2B'],['EdTech','Startup','Inovação'],['Idiomas','Inglês','Intercâmbio'],['Pós-Graduação','MBA','Especialização'],['Infantil','Pedagógico','Base'],['Técnico','Profissionalizante','SENAI'],['Concurso','Preparatório','Aprovação'],['Skills','Upskilling','Reskilling']]
+  },
+  'financeiro':{
+    label:'Financeiro / Fintech / Contabilidade',
+    keys:'financeiro fintech banco credito pagamento contabilidade fiscal tributario investimento gestao financeira seguro previdencia cambio bolsa b3 cdi selic cartao maquininha pix open finance',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.df,..._CITIES.mg,..._CITIES.rs,..._CITIES.pr,..._CITIES.sc],
+    industries:['Fintech','Contabilidade','Gestão de Investimentos','Crédito','Seguros','Câmbio','Pagamentos','Planejamento Financeiro','Assessoria Financeira','Banking'],
+    titles:['CEO','CFO','Diretor Financeiro','Sócio','Head de Produto','Diretor Comercial','Gerente de Contas','CRO','Head de Compliance','Gerente Geral'],
+    cos:['Finance','Capital','Invest','Credit','Pay','Bank','Wealth','Money','Cash','Fund'],
+    prefixes:['Smart','Clear','Open','Rapid','Safe','True','Prime','Gold','Solid','Flux'],
+    pains:['CAC de clientes PJ muito alto para o LTV do produto','Alto índice de inadimplência na carteira de crédito','Falta de automação nos processos contábeis e fiscais','Clientes insatisfeitos com rentabilidade dos investimentos','Chargeback alto em transações de e-commerce','Dificuldade em obter licença regulatória do Banco Central','Fraude em onboarding digital de novos clientes','Concorrência dos grandes bancos com produtos gratuitos','Compliance complexo exigindo muita equipe jurídica','Falta de integração entre sistemas contábeis e bancários'],
+    tags:[['Fintech','B2B','PJ'],['Contabilidade','MEI','Fiscal'],['Investimentos','Wealth','B2C'],['Crédito','Assessoria','B2B'],['Pagamentos','Antifraude','PIX'],['Seguros','Previdência','Proteção'],['Câmbio','Internacional','Import'],['Banking','Conta Digital','Open Finance'],['Compliance','LGPD','Regulatório'],['Factoring','Recebíveis','Capital de Giro']]
+  },
+  'marketing':{
+    label:'Marketing / Agências / Publicidade',
+    keys:'marketing agencia publicidade digital performance growth seo ads meta google trafego pago midia social conteudo branding crm automacao email inbound outbound pr comunicacao',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.pr,..._CITIES.rs,..._CITIES.sc,..._CITIES.pe],
+    industries:['Marketing Digital','Publicidade','Agência de Comunicação','Growth Marketing','Content Marketing','SEO/SEM','Mídia Programática','Branding','PR/Assessoria','Automação de Marketing'],
+    titles:['CEO','Diretor Criativo','Head de Growth','Sócio','Diretor Comercial','Gerente de Performance','Head de Conteúdo','Diretor de Mídia','Gerente de Contas','Co-founder'],
+    cos:['Agency','Media','Creative','Studio','Digital','Marketing','Mídia','Comunicação','Growth','Performance'],
+    prefixes:['Pixel','Impact','Reach','Boost','Click','Brand','Content','Viral','Fuse','Hype'],
+    pains:['Clientes B2B exigindo ROI mensurável e relatórios claros','Dificuldade em escalar receita sem aumentar equipe','Alta rotatividade de clientes por falta de resultados orgânicos','Briefings mal definidos gerando retrabalho e conflitos','Concorrência com agências de baixo custo','Dependência de um ou dois clientes grandes','Dificuldade em contratar talentos de growth e performance','CPM e CPC em alta pressionando ROAS dos clientes','Falta de tecnologia para automação e relatórios em escala','Clientes sem estratégia de conteúdo estruturada'],
+    tags:[['Growth','Performance','ROAS'],['SEO','Orgânico','Conteúdo'],['Meta Ads','Google Ads','Mídia'],['Branding','Identidade','Visual'],['PR','Comunicação','Imprensa'],['Automação','HubSpot','CRM'],['Social Media','Influencer','UGC'],['E-mail','Inbound','Nutrição'],['Analytics','Dados','Dashboard'],['B2B','ABM','Lead Gen']]
+  },
+  'logistica':{
+    label:'Logística / Transporte',
+    keys:'logistica transporte frete entrega last mile rastreamento tms wms armazem estoque supply chain frota caminhao carga distribuicao ecommerce fulfillment cold chain refrigerado',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.pr,..._CITIES.rs,..._CITIES.mg,..._CITIES.ba,..._CITIES.am,..._CITIES.pa],
+    industries:['Logística','Transporte Rodoviário','Last Mile','Fulfillment','Gestão de Frotas','Armazenagem','Supply Chain','Cold Chain','Logística Internacional','LogTech'],
+    titles:['CEO','Diretor de Operações','Gerente de Logística','Diretor Comercial','Head de Supply Chain','Gerente de Frota','Diretor de TI','Sócio-Fundador','Gerente de Operações','COO'],
+    cos:['Transportes','Logística','Cargas','Express','Entregas','Supply','Frete','Move','Fleet','Cargo'],
+    prefixes:['Rápido','Seguro','Log','Fast','Trans','Move','Speed','Direct','Prime','Link'],
+    pains:['Rastreamento de cargas em tempo real com falhas','Alta taxa de devoluções no e-commerce impactando custo','Gestão de frota ineficiente com alto custo por km','Dificuldade em encontrar motoristas qualificados','Controle de temperatura inadequado em cargas refrigeradas','Falta de visibilidade do status da entrega para o cliente','Custo de frete acima da média do mercado','Integração complexa com sistemas de e-commerce','Roubos e sinistros acima do esperado','Conformidade trabalhista complexa com motoristas autônomos'],
+    tags:[['Last Mile','E-commerce','Entrega'],['Frota','Rastreamento','GPS'],['TMS','Software','Gestão'],['Cold Chain','Refrigerado','Farmacêutico'],['Supply Chain','B2B','Indústria'],['Fulfillment','Estoque','WMS'],['Frete','Modal','Rodoviário'],['Aduaneiro','Import','Export'],['Drone','Inovação','Última Milha'],['Cargas Especiais','Projeto','ODT']]
+  },
+  'beleza':{
+    label:'Beleza / Estética / Bem-Estar',
+    keys:'beleza estetica salao barbearia spa wellness depilacao unhas manicure pedicure maquiagem skincare cosmetico tratamento facial corporal laser franquia clinica estetica',
+    cities:_ALL_CITIES,
+    industries:['Estética','Barbearia','Salão de Beleza','Spa','Depilação','Nail Design','Maquiagem','Skincare','Clínica Estética','Franquia de Beleza'],
+    titles:['CEO','Sócio-Proprietário','Franqueado','Diretora','Gerente','Fundadora','Coordenadora','Sócia','Administradora','Diretora de Operações'],
+    cos:['Beauty','Estética','Spa','Beleza','Charme','Glow','Studio','Center','Espaço','Clínica'],
+    prefixes:['Beauty','Glam','Charm','Glow','Zen','Prime','Elite','Gold','Rose','Pearl'],
+    pains:['Gestão manual de agenda causando conflitos e faltas','Captação de novos clientes dependente de indicação','Alta dependência de sazonalidade para faturamento','Falta de recorrência dos clientes sem programa de fidelidade','Dificuldade em precificar serviços de forma competitiva','Gestão de múltiplas unidades sem sistema centralizado','Alto custo de produtos cosméticos impactando margem','Dificuldade em treinar e reter profissionais qualificados','Falta de presença digital estruturada','Concorrência de franquias com maior poder de marca'],
+    tags:[['Beleza','Estética','SP'],['Barbearia','Franquia','Expansão'],['Spa','Wellness','Premium'],['Depilação','Laser','Tecnologia'],['Unhas','Nail Design','Arte'],['Skincare','Facial','Tratamento'],['Maquiagem','Noivas','Eventos'],['Franquia','Rede','Multi-unidade'],['Bem-Estar','Relaxamento','Massagem'],['Cosméticos','Vegano','Natural']]
+  },
+  'alimentacao':{
+    label:'Alimentação / Food Service',
+    keys:'alimentacao restaurante lanchonete cafeteria padaria mercado supermercado distribuicao atacado food service delivery ifood rappi dark kitchen franquia fast food saudavel organico',
+    cities:_ALL_CITIES,
+    industries:['Restaurante','Franquia de Alimentação','Dark Kitchen','Catering','Padaria','Cafeteria','Distribuição Alimentar','Indústria de Alimentos','Food Tech','Delivery'],
+    titles:['CEO','Sócio-Proprietário','Franqueado','Diretor de Operações','Gerente Geral','Head de Expansão','Diretor Comercial','Gerente de Produto','Fundador','COO'],
+    cos:['Food','Sabor','Restaurante','Kitchen','Café','Pão','Bistrô','Grill','Fresh','Taste'],
+    prefixes:['Sabor','Gosto','Aroma','Brasa','Verde','Canto','Espaço','Casa','Feira','Mercado'],
+    pains:['Desperdício de alimentos acima de 8% do faturamento','Ticket médio no delivery abaixo do presencial','Gestão de estoque de perecíveis gerando perdas','Alta rotatividade de funcionários na operação','Dificuldade em padronizar qualidade em múltiplas unidades','Custo de matéria-prima em alta pressionando margem','Dependência de uma única plataforma de delivery','Falta de dados sobre preferências dos clientes','Concorrência intensa com grande número de novos entrantes','Inadimplência de clientes B2B no food service'],
+    tags:[['Restaurante','Delivery','iFood'],['Franquia','Fast Food','Expansão'],['Dark Kitchen','Ghost Kitchen','Digital'],['Saudável','Orgânico','Premium'],['Padaria','Confeitaria','Artesanal'],['Catering','Eventos','Corporativo'],['Distribuição','Atacado','B2B'],['Café','Cafeteria','Grãos'],['Indústria','Processados','Laticínios'],['Bar','Entretenimento','Petiscos']]
+  },
+  'industria':{
+    label:'Indústria / Manufatura',
+    keys:'industria manufatura metalurgia plastico textil quimica farmaceutica cosmetico embalagem maquinario equipamento producao linha fabrica processo industrial automacao indústria 4.0 iot',
+    cities:[..._CITIES.sp,..._CITIES.mg,..._CITIES.rs,..._CITIES.sc,..._CITIES.pr,'São Bernardo do Campo, SP','Americana, SP','Joinville, SC','Caxias do Sul, RS','Contagem, MG'],
+    industries:['Metalurgia','Indústria Plástica','Têxtil','Química','Farmacêutica','Cosméticos','Embalagens','Equipamentos Industriais','Indústria de Alimentos','Automação Industrial'],
+    titles:['Diretor Industrial','CEO','Diretor de Produção','Gerente de Qualidade','Gerente de Operações','Diretor de Engenharia','COO','Gerente de Manutenção','Diretor Comercial','Sócio-Fundador'],
+    cos:['Indústria','Manufatura','Industrial','Metalúrgica','Plásticos','Química','Têxtil','Embalagens','Equipamentos','Fabricação'],
+    prefixes:['Metal','Plasti','Techno','Quimi','Pharma','Cosmo','Pack','Equip','Auto','Fabri'],
+    pains:['Paradas não programadas de máquinas impactando produção','Custo crescente de matéria-prima importada','Dificuldade em implementar automação e Indústria 4.0','Conformidade com normas ISO e ANVISA gerando custo','Gestão de qualidade com alto índice de retrabalho','Pressão de importações asiáticas no preço final','Falta de rastreabilidade do processo produtivo','Dificuldade em contratar operadores especializados','Gestão de resíduos e conformidade ambiental complexa','Alta variação de demanda dificultando planejamento'],
+    tags:[['Metalurgia','Aço','Manufatura'],['Plásticos','Resinas','Injeção'],['Têxtil','Moda','Exportação'],['Farmacêutica','ANVISA','Qualidade'],['Cosméticos','Vegano','Certificação'],['Embalagens','Sustentável','Papelão'],['Automação','IoT','Indústria 4.0'],['Química','Petroquímica','Processo'],['Alimentos','ABNT','FSSC'],['Equipamentos','Manutenção','Peças']]
+  },
+  'energia':{
+    label:'Energia / Sustentabilidade / Solar',
+    keys:'energia solar fotovoltaica eolica renovavel sustentabilidade esg saneamento agua meio ambiente carbono offset biocombustivel etanol eficiencia energetica led iluminacao',
+    cities:[..._CITIES.sp,..._CITIES.mg,..._CITIES.ba,..._CITIES.go,..._CITIES.mt,..._CITIES.df,..._CITIES.rj,..._CITIES.ce],
+    industries:['Energia Solar','Energia Eólica','ESG/Sustentabilidade','Saneamento','Eficiência Energética','Biocombustíveis','Crédito de Carbono','Energia Renovável','GreenTech','Climatech'],
+    titles:['CEO','Diretor Comercial','Sócio-Fundador','Diretor de Projetos','Head de Sustentabilidade','Gerente Técnico','Diretor de Operações','Gerente Comercial','Engenheiro Chefe','COO'],
+    cos:['Solar','Energy','Green','Eco','Sun','Wind','Sustenta','Renova','Clean','Carbon'],
+    prefixes:['Solar','Eco','Green','Clean','Sun','Wind','Bio','Zero','Terra','Viva'],
+    pains:['PMEs sem acesso a linhas de financiamento para energia solar','Falta de consciência dos clientes sobre retorno do investimento','Processos de homologação com concessionárias muito lentos','Alta inadimplência em projetos de energia para baixa renda','Concorrência de importadores com painéis de baixa qualidade','Empresas sem estratégia ESG estruturada para relatórios','Dificuldade em mensurar e compensar pegada de carbono','Municípios sem solução de saneamento básico adequada','Custo de O&M acima do esperado em usinas solares','Falta de mão de obra técnica para instalação de sistemas'],
+    tags:[['Solar','Fotovoltaica','Residencial'],['ESG','Sustentabilidade','B3'],['Eólica','Offshore','Geração'],['Saneamento','Água','Municipal'],['Eficiência','LED','Retrofit'],['Biocombustível','Etanol','SAF'],['Carbono','Offset','REDD+'],['GreenTech','Climatech','Inovação'],['Energia','B2B','Indústria'],['Solar','Agro','Rural']]
+  },
+  'juridico':{
+    label:'Jurídico / Advocacia / LegalTech',
+    keys:'juridico advocacia direito trabalhista empresarial tributario civil contrato licitacao compliance lgpd propriedade intelectual fusoes aquisicoes m&a legaltech automacao juridica',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.df,..._CITIES.rs,..._CITIES.pr],
+    industries:['Advocacia Empresarial','Advocacia Trabalhista','Advocacia Tributária','LegalTech','Compliance','Propriedade Intelectual','M&A','Contencioso','Assessoria Jurídica','Licitações'],
+    titles:['Sócio','Sócio-Fundador','CEO','Diretor Jurídico','Advogado Sênior','Head de Compliance','Gerente Jurídico','COO','Coordenador Jurídico','Sócio Gestor'],
+    cos:['Advogados','Advocacia','Jurídico','Law','Legal','Direito','Assessoria','Consultoria','& Associados','Partners'],
+    prefixes:['Silva','Santos','Fonseca','Mendes','Carvalho','Pires','Teixeira','Ramos','Cunha','Bezerra'],
+    pains:['Gestão de processos trabalhistas ineficiente e cara','Escritórios com processos analógicos perdendo para LegalTechs','Dificuldade em demonstrar valor para clientes além das horas','Conformidade com LGPD exigindo reestruturação interna','M&As de PMEs sem suporte jurídico especializado','Contratos mal elaborados gerando litígios recorrentes','Falta de sistema para gestão de prazos e documentos','Honorários de êxito gerando fluxo de caixa irregular','Dificuldade em captar clientes fora da rede de indicações','Alta concorrência e comoditização dos serviços jurídicos'],
+    tags:[['Trabalhista','CLT','Reclamatória'],['Empresarial','M&A','Contratos'],['Tributário','Fiscal','Planejamento'],['LegalTech','Automação','IA'],['Compliance','LGPD','Regulatório'],['Propriedade Intelectual','Marcas','Patentes'],['Licitações','Governo','Contrato'],['Família','Herança','Inventário'],['Criminal','Defesa','Investigação'],['Internacional','Arbitragem','Cross-border']]
+  },
+  'rh':{
+    label:'RH / Recrutamento / Gestão de Pessoas',
+    keys:'rh recursos humanos recrutamento selecao pessoas treinamento desenvolvimento liderança turnover cultura clima organizacional beneficios folha pagamento hrtech plataforma',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.rs,..._CITIES.pr,..._CITIES.sc,..._CITIES.go,..._CITIES.df],
+    industries:['Recrutamento e Seleção','Consultoria de RH','HRTech','T&D Corporativo','Gestão de Benefícios','Terceirização de RH','Assessment','Cultura Organizacional','People Analytics','Headhunter'],
+    titles:['CEO','Diretor de RH','CHRO','Sócio-Fundador','Head de People','Gerente de RH','Diretor de Talent Acquisition','Gerente de T&D','Head de Cultura','COO'],
+    cos:['People','Talentos','RH','HR','Pessoas','Capital Humano','Search','Hunt','Talent','Team'],
+    prefixes:['People','Talent','Human','Work','Team','Career','Leader','Pulse','Mind','Grow'],
+    pains:['Alto turnover gerando custo de reposição e perda de conhecimento','Dificuldade em contratar talentos técnicos qualificados','Cultura organizacional fraca impactando engajamento','Líderes sem preparo para gestão de equipes híbridas','Falta de sistema de gestão de performance estruturado','Processos de R&S lentos perdendo candidatos para concorrentes','Benefícios desalinhados com expectativas da nova geração','Folha de pagamento com erros gerando passivo trabalhista','Dificuldade em medir ROI dos programas de T&D','Gestão de PMEs sem área de RH estruturada'],
+    tags:[['Recrutamento','R&S','Tech'],['T&D','Treinamento','Liderança'],['HRTech','Plataforma','SaaS'],['Cultura','Engajamento','Clima'],['Benefícios','Flexíveis','Wellness'],['People Analytics','Dados','Dashboard'],['Headhunter','Executivo','C-Level'],['Outsourcing','BPO','Terceirização'],['Assessment','Mapeamento','Competências'],['Diversidade','Inclusão','DEI']]
+  }
+};
+
+// ── Gerador determinístico ────────────────────────────────────────────
+function _hash(n) {
+  let h = Math.abs(Math.sin(n + 1) * 2654435761) >>> 0;
+  return h;
+}
+function _pick(arr, seed) { return arr[_hash(seed) % arr.length]; }
+function _pickN(arr, seed, n) {
+  const out = [], seen = new Set();
+  for (let i = 0; i < arr.length && out.length < n; i++) {
+    const item = arr[_hash(seed * 31 + i) % arr.length];
+    if (!seen.has(item)) { seen.add(item); out.push(item); }
+  }
+  return out;
+}
+
+function generateLead(sectorKey, index) {
+  const s = SECTORS[sectorKey];
+  const seed = sectorKey.split('').reduce((a,c)=>a+c.charCodeAt(0),0) * 1000 + index;
+  const fn  = _pick(_FN, seed);
+  const ln  = _pick(_LN, seed + 7);
+  const name = fn + ' ' + ln;
+  const pfx  = _pick(s.prefixes, seed + 13);
+  const cos  = _pick(s.cos, seed + 17);
+  const company = pfx + ' ' + cos;
+  const title   = _pick(s.titles, seed + 23);
+  const industry= _pick(s.industries, seed + 29);
+  const location= _pick(s.cities, seed + 31);
+  const pain    = _pick(s.pains, seed + 37);
+  const tags    = _pick(s.tags, seed + 41);
+  // score: 65-96, bell-curved toward 75-88
+  const rawScore = 65 + (_hash(seed + 53) % 32);
+  const score = Math.min(96, rawScore);
+  // revenue
+  const revOptions = ['R$200k-600k/ano','R$500k-2M/ano','R$1M-5M/ano','R$2M-10M/ano','R$5M-20M/ano','R$10M-50M/ano','R$20M-80M/ano','R$50M-200M/ano'];
+  const revenue = _pick(revOptions, seed + 59);
+  const sizeOptions = ['1-10','11-50','51-200','201-1000','1000+'];
+  const size = _pick(sizeOptions, seed + 61);
+  const emailDomain = (pfx + cos).toLowerCase().replace(/[^a-z]/g,'').slice(0,12) + '.com.br';
+  const email = (fn.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    + '.' + ln.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').slice(0,8)
+    + '@' + emailDomain);
+  const phone = '+55 ' + _pick(['11','21','31','41','48','51','61','62','71','81','85'],seed+67) + ' ' +
+    (9 + (_hash(seed+71)%1)) + '' + String(_hash(seed+73)%10000).padStart(4,'0') + '-' +
+    String(_hash(seed+79)%10000).padStart(4,'0');
+  const linkedin = 'linkedin.com/in/' + fn.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'') +
+    ln.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').slice(0,5) + (index%100);
+  const activities = ['Publicou artigo sobre tendências do setor','Anunciou expansão de operações','Participou de evento do setor','Contratando posições-chave','Fechou parceria estratégica','Comentou sobre desafios do mercado','Lançou novo produto ou serviço','Atingiu meta de crescimento','Recebeu aporte ou investimento','Palestra em conferência nacional'];
+  const lastActivity = _pick(activities, seed + 83);
+  return {
+    id: index + 1,
+    name, title, company, industry, location, size, revenue,
+    email, linkedin, phone, score,
+    scoreReason: `${score >= 85 ? 'Alto' : score >= 75 ? 'Bom' : 'Médio'} fit com o setor de ${industry}`,
+    pain, tags, lastActivity,
+    nicheKeys: s.keys,
+    _sector: sectorKey
+  };
+}
+
+// Cache por setor para não regenerar
+const _sectorCache = {};
+function getSectorLeads(sectorKey) {
+  if (!_sectorCache[sectorKey]) {
+    const leads = [];
+    for (let i = 0; i < 1000; i++) leads.push(generateLead(sectorKey, i));
+    _sectorCache[sectorKey] = leads;
+  }
+  return _sectorCache[sectorKey];
+}
+
+/* Motor de busca — 1.000 leads por setor ─────────────────────────── */
+function searchLocalDB(params) {
+  const {niche, cargos, loc, sz, minScore, qty} = params;
+  const q = (niche + ' ' + cargos).toLowerCase()
+             .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  // 1. Descobre quais setores têm aderência
+  const sectorScores = Object.entries(SECTORS).map(([key, s]) => {
+    const keys = s.keys.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const words = q.split(/\s+/).filter(w => w.length > 2);
+    const hits  = words.filter(w => keys.includes(w)).length;
+    return {key, hits, total: Math.max(words.length,1)};
+  }).filter(s => s.hits > 0).sort((a,b) => b.hits - a.hits);
+
+  // Se nenhum setor bater, busca em todos
+  const targetSectors = sectorScores.length > 0
+    ? sectorScores.slice(0, 3).map(s => s.key)
+    : Object.keys(SECTORS);
+
+  // 2. Gera/busca leads dos setores alvo
+  let pool = [];
+  for (const sKey of targetSectors) {
+    pool = pool.concat(getSectorLeads(sKey));
+  }
+
+  // 3. Pontua e filtra
+  const locNorm = loc ? loc.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'') : '';
+  const szMap = {micro:'1-10',pequena:'11-50',media:'51-200',grande:'201-1000',enterprise:'1000+'};
+
+  let results = pool.map(lead => {
+    const locMatch = locNorm
+      ? lead.location.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(locNorm)
+      : true;
+    const szMatch = sz ? lead.size === (szMap[sz] || sz) : true;
+    const penalty = (!locMatch ? 8 : 0) + (!szMatch ? 5 : 0);
+    const finalScore = Math.max(40, lead.score - penalty);
+    return {...lead, score: finalScore};
+  })
+  .filter(l => l.score >= minScore)
+  .sort((a,b) => b.score - a.score);
+
+  // 4. Remove duplicatas e limita
+  const seen = new Set();
+  const unique = results.filter(l => {
+    if (seen.has(l.name+l.company)) return false;
+    seen.add(l.name+l.company); return true;
+  });
+
+  return unique.slice(0, qty).map((l, i) => ({...l, id: i+1,
+    scoreReason: `Aderência ao nicho "${niche}" — perfil ${l.industry}`
+  }));
+}
+
+// ── Referência única ao $ ──
+const $=id=>document.getElementById(id);
+let S={user:null,plan:'growth',qMax:3000,qUsed:0,leads:[],activity:[]};
+let allLeads=[],tags=[],generating=false,selPlan='growth';
+const PLANS={starter:{n:'Starter',q:500},growth:{n:'Growth',q:3000},scale:{n:'Scale',q:15000}};
+const AVHUE=[231,142,25,271,350,195];
+const TCHIPS=[{bg:'rgba(99,102,241,0.12)',c:'#a5b4fc'},{bg:'rgba(16,185,129,0.12)',c:'#10b981'},{bg:'rgba(245,158,11,0.12)',c:'#f59e0b'},{bg:'rgba(6,182,212,0.12)',c:'#06b6d4'}];
+
+function sClass(s){return s>=80?'shi':s>=60?'shm':'shl';}
+function sColor(s){return s>=80?'var(--emerald)':s>=60?'var(--amber)':'var(--rose)';}
+function inits(n){return(n||'').split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();}
+function avBg(i){return `hsl(${AVHUE[i%AVHUE.length]},65%,55%)`;}
+
+function updateNav(in_){
+  $('nav-pub-links').style.display=in_?'none':'flex';
+  $('nav-pub-r').style.display=in_?'none':'flex';
+  $('nav-user').style.display=in_?'flex':'none';
+  if(in_&&S.user){$('nav-em').textContent=S.user.email;$('nav-av').textContent=S.user.email[0].toUpperCase();}
+}
+function scrollToId(id){$(id)?.scrollIntoView({behavior:'smooth'});}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$(id).classList.add('active');}
+function goFinder(){if(!S.user){openModal('login');return;}showPage('finder');updateQuota();}
+let annualBilling=false;
+function toggleBilling(el){
+  annualBilling=!annualBilling;el.classList.toggle('on',annualBilling);
+  document.querySelectorAll('.pamt').forEach(e=>e.textContent=annualBilling?e.dataset.a:e.dataset.m);
+}
+function pickP(el,plan){document.querySelectorAll('.popt').forEach(p=>p.classList.remove('sel'));el.classList.add('sel');selPlan=plan;}
+function actSide(btn,v){document.querySelectorAll('.si').forEach(i=>i.classList.remove('on'));btn.classList.add('on');updateDash();}
+
+
+
+function updateDash(){
+  const h=new Date().getHours();
+  const gr=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
+  const n=S.user?.name?.split(' ')[0]||'usuário';
+  $('d-greet').textContent=`${gr}, ${n} 👋`;
+  const tot=S.leads.length+S.qUsed;
+  const ql=S.leads.filter(l=>l.score>=70).length;
+  const pct=Math.min(Math.round((tot/S.qMax)*100),100);
+  $('m-tot').textContent=tot;$('m-q').textContent=ql;$('m-p').textContent=pct+'%';$('m-ps').textContent=`de ${S.qMax.toLocaleString('pt-BR')} leads`;
+  if($('sq-v'))$('sq-v').textContent=`${tot.toLocaleString('pt-BR')} / ${S.qMax.toLocaleString('pt-BR')}`;
+  if($('sq-f'))$('sq-f').style.width=pct+'%';
+  if($('sq-p'))$('sq-p').textContent=`Plano ${PLANS[S.plan]?.n||'Growth'}`;
+  renderRec();renderAct();
+}
+function renderRec(){
+  const r=S.leads.slice(-6).reverse();
+  if(!r.length){$('rec-table').innerHTML=`<div style="padding:2rem 0;text-align:center;color:var(--text-3);font-size:0.84rem;">Nenhum lead ainda. <a href="#" onclick="goFinder()" style="color:var(--indigo);font-weight:600;text-decoration:none">Gerar leads →</a></div>`;return;}
+  $('rec-table').innerHTML=`<table class="dt"><thead><tr><th>Lead</th><th>Empresa</th><th>Score</th><th>Status</th></tr></thead><tbody>${r.map(l=>`<tr><td><div class="cp">${l.name}</div><div class="cs">${l.title}</div></td><td>${l.company}<div class="cs">${l.location||''}</div></td><td><span class="schip ${sClass(l.score)}">${l.score}</span></td><td><span class="pill p-new"><span class="p-dot"></span>novo</span></td></tr>`).join('')}</tbody></table>`;
+}
+function renderAct(){
+  const items=S.activity.slice(-5).reverse();
+  if(!items.length){$('act-list').innerHTML=`<div style="padding:1.5rem 0;text-align:center;color:var(--text-4);font-size:0.8rem;">Sem atividade ainda</div>`;return;}
+  $('act-list').innerHTML=items.map(a=>`<div class="ai"><div class="adot" style="background:${a.color}"></div><div class="abody"><div class="atxt">${a.text}</div><div class="atime">${a.time}</div></div></div>`).join('');
+}
+
+
+function updateQuota(){
+  const used=S.leads.length+S.qUsed;const pct=Math.min(Math.round((used/S.qMax)*100),100);
+  if($('q-used'))$('q-used').textContent=`${used.toLocaleString('pt-BR')} / ${S.qMax.toLocaleString('pt-BR')} usados`;
+  if($('q-plan'))$('q-plan').textContent=`Plano ${PLANS[S.plan]?.n||'Growth'}`;
+  if($('q-fill'))$('q-fill').style.width=pct+'%';
+}
+function addTag(e){
+  if(e.key!=='Enter')return;const fi=$('cargo-fi');const v=fi.value.trim();if(!v)return;
+  tags.push(v);fi.value='';renderTags();
+}
+function rmTag(i){tags.splice(i,1);renderTags();}
+function renderTags(){
+  const w=$('cargo-wrap');w.querySelectorAll('.tchip').forEach(t=>t.remove());
+  tags.forEach((t,i)=>{const el=document.createElement('div');el.className='tchip';el.innerHTML=`${t}<span class="tx" onclick="rmTag(${i})">×</span>`;w.insertBefore(el,$('cargo-fi'));});
+}
+
+
+let testMode = false;
+function toggleTestMode(el){
+  testMode = !testMode;
+  el.classList.toggle('on', testMode);
+  const lbl = document.querySelector('#test-mode-tog').parentElement.querySelector('div div:first-child');
+  toast(testMode ? '🧪 Modo Teste ativado — usando banco local' : '🤖 Modo IA ativado');
+}
+
+async function generateLeads(){
+  if(generating)return;
+  if(!S.user){openModal('login');return;}
+  const niche=$('f-niche').value.trim();
+  if(!niche){toast('Informe o nicho para buscar leads','err');return;}
+  const qty=parseInt($('f-qty').value);
+  const minS=parseInt($('f-score').value);
+  const cargos=tags.join(', ')||'';
+  const loc=$('f-loc').value.trim();
+  const sz=$('f-sz').value;
+  generating=true;$('gen-btn').disabled=true;
+  $('gen-btn').innerHTML=`<div class="spin" style="width:15px;height:15px;border-width:2px;"></div>${testMode?'Buscando no banco local…':'Gerando leads com IA…'}`;
+  $('fstrip').style.display='none';$('exp-row').style.display='none';
+  $('leads-out').innerHTML=`<div class="empty"><div class="spin"></div><div class="empty-h" style="margin-top:0.5rem">${testMode?'Consultando banco de leads…':'Analisando parâmetros com IA…'}</div><div class="empty-p">Buscando os melhores leads para <strong>${niche}</strong></div></div>`;
+  $('res-sub').textContent='Processando…';
+  try{
+    if(testMode){
+      // ── MODO TESTE: banco local ──
+      await new Promise(r=>setTimeout(r,900)); // simula latência
+      allLeads = searchLocalDB({niche, cargos, loc, sz, minScore:minS, qty});
+      if(!allLeads.length) throw new Error('Nenhum lead encontrado para estes parâmetros. Tente termos mais genéricos.');
+    } else {
+      // ── MODO IA ──
+      const rev=$('f-rev').value;
+      const pain=$('f-pain').value.trim();
+      const extra=$('f-extra').value.trim();
+      const prompt=`Você é especialista em geração e qualificação de leads B2B e B2C. Gere exatamente ${qty} leads ficticios mas realistas:\n\nNICHO: ${niche}\nCARGOS ALVO: ${cargos||'decisores relevantes'}\nLOCALIZAÇÃO: ${loc||'Brasil'}\nTAMANHO: ${sz||'qualquer'}\nFATURAMENTO: ${rev||'qualquer'}\nDORES: ${pain||'não especificado'}\nEXTRAS: ${extra||'nenhum'}\nSCORE MÍNIMO: ${minS}\n\nRetorne APENAS JSON válido (sem markdown):\n{"leads":[{"id":1,"name":"Nome Completo","title":"Cargo","company":"Empresa Ltda","industry":"Setor","location":"Cidade, Estado","size":"51-200 funcionários","revenue":"R$2M-10M/ano","email":"nome@empresa.com.br","linkedin":"linkedin.com/in/usuario","phone":"+55 11 99999-9999","score":85,"scoreReason":"1 frase","pain":"Principal dor em 1 frase","tags":["Tag1","Tag2","Tag3"],"lastActivity":"Ação recente","nicheKeys":"palavras chave do nicho"}]}\n\nUse nomes e contextos brasileiros. Score entre ${minS} e 100.`;
+      const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,messages:[{role:'user',content:prompt}]})});
+      const data=await res.json();
+      let txt=(data.content||[]).map(i=>i.text||'').join('').replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+      allLeads=JSON.parse(txt).leads||[];
+    }
+    S.leads=[...S.leads,...allLeads];
+    S.activity.push({text:`${allLeads.length} leads ${testMode?'encontrados no banco':'gerados'} para "${niche}"`,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),color:'var(--indigo)'});
+    renderLeads(allLeads);updateDash();updateQuota();
+    toast(`${allLeads.length} leads encontrados com sucesso! ${testMode?'🗄️':'🎯'}`);
+    $('res-sub').textContent=`${allLeads.length} leads encontrados ${testMode?'(banco local)':'(IA)'}`;
+    $('fstrip').style.display='flex';$('exp-row').style.display='flex';
+  }catch(err){
+    $('leads-out').innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-h">Nenhum resultado</div><div class="empty-p">${err.message||'Verifique os parâmetros e tente novamente.'}</div></div>`;
+    $('res-sub').textContent='Erro — tente novamente';
+    toast(err.message||'Erro. Tente novamente.','err');
+  }finally{
+    generating=false;$('gen-btn').disabled=false;
+    $('gen-btn').innerHTML=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.5 5H12.5L9.25 7.25L10.5 12L7 9.75L3.5 12L4.75 7.25L1.5 5H5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Gerar Leads com IA`;
+  }
+}
+
+function renderLeads(leads){
+  if(!leads.length){$('leads-out').innerHTML=`<div class="empty"><div class="empty-ico">🔍</div><div class="empty-h">Nenhum lead encontrado</div><div class="empty-p">Tente reduzir o score mínimo ou ajustar os filtros.</div></div>`;return;}
+  $('leads-out').innerHTML=`<div class="lcards">${leads.map((l,i)=>{const bg=avBg(i),ts=(l.tags||[]).slice(0,3);return`<div class="lc"><div class="lc-av" style="background:${bg}">${inits(l.name)}</div><div class="lc-body"><div class="lc-name">${l.name}</div><div class="lc-role">${l.title}</div><div class="lc-co">${l.company} · ${l.location}</div>${l.pain?`<div class="lc-pain">💡 ${l.pain}</div>`:''}<div class="lc-tags">${ts.map((t,ti)=>`<span class="ltag" style="background:${TCHIPS[ti%4].bg};color:${TCHIPS[ti%4].c}">${t}</span>`).join('')}</div></div><div class="lc-r"><div class="lc-score" style="color:${sColor(l.score)}">${l.score}</div><div class="lc-slbl">Score</div><div class="lc-cbns"><button class="lcbtn" onclick="copyEm('${l.email||''}',event)" title="${l.email||''}">✉ E-mail</button><button class="lcbtn" onclick="openLI('${l.linkedin||''}',event)">in LinkedIn</button></div></div></div>`;}).join('')}</div>`;
+}
+function filterL(t,btn){
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  const m={all:allLeads,hi:allLeads.filter(l=>l.score>=80),md:allLeads.filter(l=>l.score>=60&&l.score<80),lo:allLeads.filter(l=>l.score<60)};
+  const r=m[t]||allLeads;renderLeads(r);$('res-sub').textContent=`${r.length} de ${allLeads.length} leads`;
+}
+function copyEm(em,e){e.stopPropagation();if(!em)return;navigator.clipboard?.writeText(em).then(()=>toast('E-mail copiado!')).catch(()=>toast(em));}
+function openLI(url,e){e.stopPropagation();if(url)window.open('https://'+url.replace(/^https?:\/\//,''),'_blank');}
+function exportCSV(){if(!allLeads.length)return;const h=['Nome','Cargo','Empresa','Setor','Local','E-mail','LinkedIn','Telefone','Score','Dor'];const rows=allLeads.map(l=>[l.name,l.title,l.company,l.industry,l.location,l.email,l.linkedin,l.phone,l.score,l.pain].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`));dl('leads.csv','text/csv',[h.join(','),...rows.map(r=>r.join(','))].join('\n'));toast('CSV exportado!');}
+function exportJSON(){if(!allLeads.length)return;dl('leads.json','application/json',JSON.stringify(allLeads,null,2));toast('JSON exportado!');}
+function dl(name,type,content){const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([content],{type})),download:name});a.click();URL.revokeObjectURL(a.href);}
+
+function openModal(type){
+  const box=$('mbox');
+  if(type==='login'){
+    box.innerHTML=`<div class="mlogo"><div class="mlogo-mark">L</div><span class="mlogo-n">LeadForge</span></div><div class="mh">Bem-vindo de volta</div><div class="msub">Entre na sua conta para continuar</div><div class="mf"><label>E-mail</label><input class="minp" id="m-em" type="email" placeholder="voce@email.com"/></div><div class="mf"><label>Senha</label><input class="minp" id="m-pw" type="password" placeholder="••••••••"/></div><button class="mbtn" onclick="doLogin()">Entrar →</button><div class="msw">Não tem conta? <a onclick="openModal('register')">Criar gratuitamente →</a></div>`;
+  }else if(type==='register'){
+    box.innerHTML=`<div class="mlogo"><div class="mlogo-mark">L</div><span class="mlogo-n">LeadForge</span></div><div class="mh">Criar sua conta</div><div class="msub">14 dias grátis · Sem cartão de crédito</div><div class="mf"><label>Nome completo</label><input class="minp" id="m-nm" type="text" placeholder="Seu nome"/></div><div class="mf"><label>E-mail</label><input class="minp" id="m-em" type="email" placeholder="voce@email.com"/></div><div class="mf"><label>Senha</label><input class="minp" id="m-pw" type="password" placeholder="Mínimo 8 caracteres"/></div><div class="mf"><label>Escolha seu plano</label><div class="ppicker"><div class="popt" onclick="pickP(this,'starter')"><div class="popt-n">Starter</div><div class="popt-p">R$97</div></div><div class="popt sel" onclick="pickP(this,'growth')"><div class="popt-n">Growth</div><div class="popt-p">R$297</div></div><div class="popt" onclick="pickP(this,'scale')"><div class="popt-n">Scale</div><div class="popt-p">R$897</div></div></div></div><button class="mbtn" onclick="doReg()">Criar conta grátis →</button><div class="msw">Já tem conta? <a onclick="openModal('login')">Entrar →</a></div>`;
+    selPlan='growth';
+  }else if(type==='demo'){
+    box.innerHTML=`<div class="mlogo"><div class="mlogo-mark">L</div><span class="mlogo-n">LeadForge</span></div><div class="mh">Explorar demo</div><div class="msub">Teste a plataforma sem criar uma conta</div><div class="demo-info">O LeadForge usa IA para gerar listas de leads qualificados em qualquer nicho. Configure seu ICP, defina os critérios e receba uma lista estruturada e pontuada em segundos — pronta para exportar para o seu CRM.</div><button class="mbtn" onclick="doDemo()">Entrar no modo demo →</button>`;
+  }
+  $('mbg').classList.add('open');
+}
+
+function closeMOut(e){if(e.target===$('mbg'))closeM();}
+function closeM(){$('mbg').classList.remove('open');}
+function doLogin(){const em=$('m-em')?.value||'demo@leadforge.com';if(!em){toast('Informe seu e-mail','err');return;}S.user={email:em,name:em.split('@')[0]};S.plan='growth';S.qMax=PLANS['growth'].q;S.qUsed=127;closeM();updateNav(true);updateDash();updateQuota();showPage('dashboard');toast('Bem-vindo de volta! 👋');}
+function doDemo(){S.user={email:'demo@leadforge.com',name:'Demo'};S.plan='growth';S.qMax=PLANS['growth'].q;S.qUsed=127;S.leads=[];closeM();updateNav(true);updateDash();updateQuota();showPage('dashboard');toast('Modo demo ativado! 🚀');}
+function doReg(){const em=$('m-em')?.value,nm=$('m-nm')?.value;if(!em||!nm){toast('Preencha todos os campos','err');return;}S.user={email:em,name:nm};S.plan=selPlan;S.qMax=PLANS[selPlan].q;S.qUsed=0;S.leads=[];closeM();updateNav(true);updateDash();updateQuota();showPage('dashboard');toast('Conta criada! 14 dias grátis ativados 🎉');}
+function logout(){S={user:null,plan:null,qMax:3000,qUsed:0,leads:[],activity:[]};allLeads=[];tags=[];updateNav(false);showPage('landing');toast('Até logo!');}
+
+let toastT;
+function toast(msg,type='ok'){
+  const el=$('toast'),ic=$('ticon');$('tmsg').textContent=msg;
+  if(type==='err'){ic.style.background='var(--rose-dim)';ic.style.color='var(--rose)';ic.textContent='✕';el.style.borderColor='rgba(244,63,94,0.25)';}
+  else{ic.style.background='var(--emerald-dim)';ic.style.color='var(--emerald)';ic.textContent='✓';el.style.borderColor='var(--border-md)';}
+  el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('show'),3500);
+}
+document.addEventListener('DOMContentLoaded',()=>updateNav(false));
+</script>
+</body>
+</html>
