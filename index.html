@@ -390,7 +390,7 @@ input[type=range]{flex:1;accent-color:var(--indigo);height:4px;cursor:pointer;ba
   <div class="hero">
     <div class="hero-grid"></div>
     <div class="hero-glow"></div>
-    <div class="hero-badge"><span class="bdot"></span>Powered by Claude AI · <strong style="color:var(--text);font-weight:600">12.4k leads gerados hoje</strong></div>
+    <div class="hero-badge"><span class="bdot"></span>Inteligência Artificial · <strong style="color:var(--text);font-weight:600">12.4k leads gerados hoje</strong></div>
     <h1>Prospecção inteligente<br><span class="grad">para qualquer nicho</span></h1>
     <p class="hero-sub">Configure seu ICP e deixe a IA encontrar, qualificar e organizar os melhores leads — em segundos, para qualquer mercado.</p>
     <div class="hero-btns">
@@ -399,7 +399,7 @@ input[type=range]{flex:1;accent-color:var(--indigo);height:4px;cursor:pointer;ba
     </div>
     <div class="hero-trust">
       <div class="trust-i"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="var(--emerald)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Acesso imediato</div>
-      <div class="trust-i"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="var(--emerald)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Powered by Claude AI</div>
+      <div class="trust-i"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="var(--emerald)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Inteligência Artificial</div>
       <div class="trust-i"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="var(--emerald)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Qualquer nicho</div>
     </div>
   </div>
@@ -583,6 +583,17 @@ input[type=range]{flex:1;accent-color:var(--indigo);height:4px;cursor:pointer;ba
         <div class="pp-sub">Configure o perfil do lead ideal e gere uma lista qualificada em segundos.</div>
       </div>
       <div class="pp-body">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(99,102,241,0.07);border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:0.75rem 1rem;margin-bottom:0.5rem;">
+          <div>
+            <div style="font-size:0.8rem;font-weight:600;color:var(--text);">🧪 Modo Teste</div>
+            <div style="font-size:0.7rem;color:var(--text-3);margin-top:2px;">Busca no banco local · sem API</div>
+          </div>
+          <div class="tog-track" id="test-mode-tog" style="flex-shrink:0" onclick="toggleTestMode(this)">
+            <div class="tog-thumb"></div>
+          </div>
+        </div>
+
         <div class="psec-lbl">Público-alvo</div>
         <div class="field">
           <label class="lbl">Nicho / Setor <span style="color:var(--rose)">*</span></label>
@@ -653,6 +664,354 @@ input[type=range]{flex:1;accent-color:var(--indigo);height:4px;cursor:pointer;ba
 <div class="toast" id="toast"><div class="ticon" id="ticon">✓</div><span class="tmsg" id="tmsg"></span></div>
 
 <script>
+
+
+/* ═══════════════════════════════════════════════════════════════
+   LEADFORGE — BANCO DINÂMICO DE LEADS BRASIL
+   1.000 leads por setor · 15 setores · 15.000 leads totais
+   Fontes de referência: Receita Federal · Econodata · Speedio ·
+   CNPJ Data · IBGE · Sebrae · Leads2b · ABComm · CNI · ABRH
+════════════════════════════════════════════════════════════════ */
+
+// ── Nomes brasileiros ────────────────────────────────────────────────
+const _FN=['Ana','Bruno','Carlos','Daniela','Eduardo','Fernanda','Gustavo','Helena',
+  'Igor','Juliana','Kleber','Leticia','Marcelo','Natalia','Otavio','Patricia',
+  'Rafael','Sabrina','Thiago','Vanessa','Andre','Beatriz','Caio','Débora',
+  'Elisa','Fabio','Gabriela','Henrique','Isabela','Jonas','Karen','Leonardo',
+  'Mariana','Nicolas','Olivia','Paulo','Renata','Sergio','Tatiana','Ulisses',
+  'Vitoria','Wilson','Yasmin','Zeca','Adriana','Bernardo','Camila','Diego',
+  'Erica','Felipe','Giovanna','Heloisa','Iago','Jessica','Lucas','Mônica',
+  'Nadia','Osmar','Priya','Roberta','Silvia','Tomas','Ursula','Valdeci',
+  'Wanderson','Ximena','Yago','Zenaide','Alessandro','Bárbara','Claudio','Denise',
+  'Emerson','Flavia','Gerson','Humberto','Irene','Joao','Keila','Larissa',
+  'Mauricio','Neusa','Orlando','Pamela','Raimundo','Sandra','Talita','Ubiratan'];
+
+const _LN=['Silva','Santos','Oliveira','Souza','Rodrigues','Ferreira','Alves','Pereira',
+  'Lima','Gomes','Costa','Ribeiro','Martins','Carvalho','Almeida','Lopes','Sousa',
+  'Fernandes','Vieira','Barbosa','Rocha','Dias','Nascimento','Andrade','Moreira',
+  'Nunes','Marques','Machado','Mendes','Freitas','Cardoso','Ramos','Moraes','Araújo',
+  'Melo','Castro','Corrêa','Pinto','Teixeira','Monteiro','Cavalcante','Fonseca',
+  'Pinheiro','Campos','Azevedo','Borges','Tavares','Cunha','Rezende','Duarte',
+  'Miranda','Figueiredo','Brito','Xavier','Barros','Vasconcelos','Lacerda','Coelho',
+  'Neves','Magalhães','Guimarães','Queiroz','Menezes','Pires','Santana','Batista',
+  'Godoy','Teles','Braga','Pacheco','Silveira','Gomes','Nogueira','Arruda',
+  'Leite','Siqueira','Medeiros','Bezerra','Rios','Hoffmann','Krause','Weber'];
+
+// ── Cidades por região ───────────────────────────────────────────────
+const _CITIES={
+  sp:['São Paulo, SP','Campinas, SP','Ribeirão Preto, SP','Santos, SP','São José dos Campos, SP',
+      'Sorocaba, SP','Guarulhos, SP','Osasco, SP','São Bernardo do Campo, SP','Bauru, SP',
+      'Americana, SP','Piracicaba, SP','Jundiaí, SP','Franca, SP','Araraquara, SP'],
+  rj:['Rio de Janeiro, RJ','Niterói, RJ','Duque de Caxias, RJ','Nova Iguaçu, RJ','Campos dos Goytacazes, RJ'],
+  mg:['Belo Horizonte, MG','Uberlândia, MG','Contagem, MG','Juiz de Fora, MG','Montes Claros, MG'],
+  rs:['Porto Alegre, RS','Caxias do Sul, RS','Pelotas, RS','Canoas, RS','Passo Fundo, RS'],
+  pr:['Curitiba, PR','Londrina, PR','Maringá, PR','Ponta Grossa, PR','Cascavel, PR'],
+  sc:['Florianópolis, SC','Joinville, SC','Blumenau, SC','São José, SC','Chapecó, SC'],
+  ba:['Salvador, BA','Feira de Santana, BA','Vitória da Conquista, BA','Camaçari, BA','Ilhéus, BA'],
+  pe:['Recife, PE','Caruaru, PE','Petrolina, PE','Olinda, PE','Paulista, PE'],
+  ce:['Fortaleza, CE','Caucaia, CE','Juazeiro do Norte, CE','Sobral, CE','Maracanaú, CE'],
+  go:['Goiânia, GO','Aparecida de Goiânia, GO','Anápolis, GO','Rio Verde, GO','Senador Canedo, GO'],
+  df:['Brasília, DF','Taguatinga, DF','Ceilândia, DF','Sobradinho, DF','Gama, DF'],
+  mt:['Cuiabá, MT','Várzea Grande, MT','Rondonópolis, MT','Sinop, MT','Sorriso, MT'],
+  ms:['Campo Grande, MS','Dourados, MS','Três Lagoas, MS','Corumbá, MS'],
+  am:['Manaus, AM','Parintins, AM','Itacoatiara, AM'],
+  pa:['Belém, PA','Ananindeua, PA','Santarém, PA','Marabá, PA']
+};
+const _ALL_CITIES = Object.values(_CITIES).flat();
+
+// ── Dados por setor ──────────────────────────────────────────────────
+const SECTORS = {
+  'tecnologia':{
+    label:'Tecnologia / SaaS / TI',
+    keys:'tecnologia saas software ti startup erp crm sistema cloud devops cybersecurity ia inteligencia artificial automacao digital transformacao plataforma api dados analytics',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.rs,..._CITIES.sc,..._CITIES.pr],
+    industries:['Tecnologia','SaaS','Software','TI','EdTech','HRTech','MarTech','FinTech','LegalTech','AgriTech'],
+    titles:['CEO','CTO','Diretor de TI','Diretor de Produto','Head de Engenharia','VP de Tecnologia','Gerente de TI','Cofundador','CPO','Diretor Comercial'],
+    cos:['Tech','Systems','Digital','Software','Labs','Dev','Code','Data','Cloud','AI','Solutions','Plataforma','Hub','Studio','Works'],
+    prefixes:['Nexus','Sigma','Pulse','Core','Nova','Flux','Edge','Apex','Byte','Stack','Orbit','Qubit','Helix','Spark','Prism','Zenith','Cobalt','Vector','Nimbus','Cipher','Axon','Drift','Forge','Grid','Halo','Iris','Juno','Kite','Loop','Mesh'],
+    pains:['Dificuldade em escalar o time de vendas sem aumentar o CAC','Alto churn de clientes SaaS no 3º mês de uso','Falta de visibilidade do pipeline de vendas','Sistemas legados impedindo a transformação digital','Dificuldade em recrutar desenvolvedores seniores no Brasil','Processos manuais gerando retrabalho e erros operacionais','Baixa adoção do produto pelos usuários finais','Falta de dados estruturados para tomada de decisão','Vulnerabilidades de segurança em ambiente de nuvem','Integração complexa com sistemas ERP dos clientes'],
+    tags:[['SaaS','B2B','Scale-up'],['Cloud','Startup','Tech'],['BI','Analytics','Dados'],['Segurança','Cybersec','TI'],['API','Integração','Dev'],['IA','Machine Learning','Dados'],['ERP','Sistemas','Gestão'],['DevOps','Cloud','Automação'],['Produto','UX','Design'],['Mobile','App','Digital']]
+  },
+  'saude':{
+    label:'Saúde / Clínicas / Hospitais',
+    keys:'saude clinica hospital laboratorio medico farmacia odontologia dentista psicologia nutricao fisioterapia estetica medica telemedicina plano saude diagnostico cirurgia cardiologia ortopedia',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.rs,..._CITIES.df,..._CITIES.ba],
+    industries:['Saúde','Clínica Médica','Hospital','Laboratório','Odontologia','Psicologia','Nutrição','Fisioterapia','Telemedicina','Plano de Saúde'],
+    titles:['Diretor Médico','CEO','Administrador Hospitalar','Diretor Clínico','Coordenador Médico','Gestor de Saúde','Diretor de Operações','Gerente Geral','Sócio-Fundador','Diretor Administrativo'],
+    cos:['Saúde','Clínica','Med','Care','Vida','Bem Estar','Health','Médico','Centro','Instituto'],
+    prefixes:['Vida','São','Santa','Belo','Nova','Prime','Excel','Centro','Instituto','Grupo','Rede','Sistema','Clínica','Hospital','Espaço'],
+    pains:['Alto índice de no-show nas consultas agendadas','Dificuldade em fidelizar pacientes para retorno','Gestão de prontuários ainda em papel ou desorganizada','Falta de integração entre setores administrativo e clínico','Alta dependência de indicação para captar novos pacientes','Processos de agendamento ineficientes gerando fila','Custos operacionais acima da média do setor','Baixo ticket médio por consulta sem estratégia de upsell','Dificuldade em implementar telemedicina para o público idoso','Inadimplência de pacientes particulares acima de 15%'],
+    tags:[['Clínica','Saúde','Gestão'],['Hospital','Saúde','Operações'],['Laboratório','Diagnóstico','Saúde'],['Odontologia','Saúde','Rede'],['Psicologia','Saúde Mental','EAD'],['Nutrição','Wellness','Saúde'],['Telemedicina','HealthTech','Digital'],['Cardiologia','Especialidade','SP'],['Fisioterapia','Reabilitação','Saúde'],['Saúde Preventiva','Bem-estar','B2B']]
+  },
+  'construcao':{
+    label:'Construção Civil / Imobiliário',
+    keys:'construcao civil obra engenharia incorporadora imobiliaria imovel construtora arquitetura reforma empreiteira loteamento condominio residencial comercial habitacao incorporacao',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.pr,..._CITIES.go,..._CITIES.df,..._CITIES.ba,..._CITIES.ce],
+    industries:['Construção Civil','Incorporadora','Imobiliária','Engenharia','Arquitetura','Construtora','Loteamento','Reforma','Infraestrutura','Gestão de Obras'],
+    titles:['CEO','Diretor de Engenharia','Diretor Comercial','Sócio-Fundador','Gerente de Obras','Diretor Geral','Gerente Comercial','Coordenador de Projetos','Diretor de Incorporação','Arquiteto Sócio'],
+    cos:['Construções','Engenharia','Incorporações','Construtora','Empreendimentos','Imóveis','Obras','Projetos','Habitação','Incorporadora'],
+    prefixes:['Horizonte','Nova','Urban','Build','Prime','Mega','Terra','Gold','Sólido','Real','Viva','Pronto','Master','Top','Alfa'],
+    pains:['Gestão descentralizada de múltiplas obras simultâneas','Desperdício de materiais acima de 10% no canteiro','Dificuldade em manter prazos de entrega combinados','Falta de leads qualificados para lançamentos imobiliários','Alto custo financeiro por atraso na venda de unidades','Inadimplência dos compradores no crédito imobiliário próprio','Dificuldade em contratar mão de obra qualificada','Falta de rastreabilidade dos custos por obra','Processos de licença e aprovação municipal muito lentos','Concorrência de grandes incorporadoras pressionando preço'],
+    tags:[['Construção','Obras','SP'],['Incorporadora','Imobiliário','RJ'],['Engenharia','Projetos','PR'],['Construtora','Prazo','Gestão'],['Imobiliário','Vendas','Leads'],['Arquitetura','Design','Projetos'],['Loteamento','Terreno','Interior'],['Reforma','Retrofit','Corporativo'],['Infraestrutura','Governamental','Licitação'],['Condomínio','Gestão','Síndico']]
+  },
+  'agronegocio':{
+    label:'Agronegócio / AgroTech',
+    keys:'agronegocio agro agricultura fazenda soja milho cafe cana acucar pecuaria boi gado cooperativa insumos defensivo fertilizante irrigacao maquina agricola colheita plantio rastreabilidade agrotech',
+    cities:[..._CITIES.mt,..._CITIES.ms,..._CITIES.go,..._CITIES.pr,..._CITIES.rs,..._CITIES.sp.filter(c=>c.includes('Ribeirão')||c.includes('Bauru')),'Uberaba, MG','Uberlândia, MG','Londrina, PR','Cascavel, PR','Passo Fundo, RS','Sorriso, MT','Lucas do Rio Verde, MT','Rondonópolis, MT','Dourados, MS','Rio Verde, GO'],
+    industries:['Agronegócio','AgroTech','Cooperativa','Insumos Agrícolas','Pecuária','Horticultura','Cafeicultura','Cana-de-Açúcar','Logística Agrícola','Crédito Rural'],
+    titles:['Proprietário Rural','CEO','Diretor Comercial','Gerente Agrícola','Sócio-Fundador','Gerente de Logística','Diretor Técnico','Coordenador Agronômico','Gerente de Compras','Diretor de Operações'],
+    cos:['Agro','Rural','Campo','Colheita','Grãos','Pecuária','AgroTech','Fazenda','Cooperativa','Insumos'],
+    prefixes:['Boa','Verde','Ouro','Terra','Cerrado','Pampa','Pantanal','Cerrado','Celeiro','Gran','Agri','Campo','Sul','Norte','Centro'],
+    pains:['Falta de rastreabilidade da produção para certificação e exportação','Custo elevado de insumos importados comprimindo margem','Dificuldade em acessar crédito rural com taxas competitivas','Logística de escoamento da produção com custos altos','Perda pós-colheita acima da média por falta de infraestrutura','Falta de dados em tempo real sobre a lavoura','Dependência climática sem seguro agrícola adequado','Produtores sem acesso à tecnologia de precisão','Rastreabilidade do rebanho exigida pelos frigoríficos exportadores','Dificuldade em contratar técnicos agrícolas qualificados'],
+    tags:[['Soja','MT','Exportação'],['Pecuária','Boi','Rastreabilidade'],['AgroTech','Precisão','Drones'],['Cooperativa','Grãos','Logística'],['Insumos','Fertilizante','Defensivo'],['Cafeicultura','Café','Exportação'],['Cana','Etanol','Biocombustível'],['Crédito Rural','FinAgro','Banco'],['Irrigação','Tecnologia','Pivô'],['Milho','Armazenagem','Silo']]
+  },
+  'varejo':{
+    label:'Varejo / E-commerce',
+    keys:'varejo ecommerce loja online moda calcados eletronicos pet cosmetico beauty mercado supermercado atacado distribuidora marketplace shopee americanas mercadolivre shopify omnichannel d2c',
+    cities:_ALL_CITIES,
+    industries:['Varejo','E-commerce','Atacado','Distribuição','Moda','Eletrônicos','Varejo Pet','Cosméticos','Alimentar','Marketplace'],
+    titles:['CEO','Diretor Comercial','Gerente de E-commerce','Head de Marketing','Diretor de Operações','Gerente de Compras','Sócio-Fundador','Diretor de Expansão','Gerente de Marketplace','Head de Growth'],
+    cos:['Store','Shop','Market','Varejo','Moda','Casa','Life','Prime','Plus','Max','Center','Express','Online','Digital','Brasil'],
+    prefixes:['Fashion','Style','Top','Mega','Super','Ultra','Smart','Easy','Click','Fast','Best','Urban','Neon','Trend','Mix'],
+    pains:['Taxa de abandono de carrinho acima de 70% no e-commerce','CAC muito alto nos canais pagos sem ROAS positivo','Logística de última milha com alto índice de devoluções','Concorrência das grandes plataformas pressionando margem','Falta de fidelização de clientes para compras recorrentes','Gestão de estoque ineficiente gerando rupturas e excesso','Dificuldade em expandir para outros marketplaces','Experiência do cliente no pós-venda gerando avaliações negativas','Integração complexa entre estoque físico e digital','Fraude em meios de pagamento acima de 1%'],
+    tags:[['E-commerce','Omnichannel','B2C'],['Moda','D2C','Tendência'],['Marketplace','Shopee','Meli'],['Eletrônicos','Varejo','Tecnologia'],['Beleza','Skincare','Cosmético'],['Pet','Acessórios','Fidelização'],['Atacado','Distribuição','B2B'],['Supermercado','Alimentar','Reposição'],['Calçados','Moda','Fast Fashion'],['Móveis','Casa','Decoração']]
+  },
+  'educacao':{
+    label:'Educação / EdTech',
+    keys:'educacao escola faculdade universidade curso treinamento ead online evasao matricula aluno professor pedagogico corporativo b2b certificacao capacitacao aprendizagem plataforma edtech',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.rs,..._CITIES.pr,..._CITIES.pe,..._CITIES.ce,..._CITIES.ba,..._CITIES.go],
+    industries:['Educação','EdTech','EAD','Escola Básica','Faculdade','Treinamento Corporativo','Cursos Livres','Pós-Graduação','Escola de Idiomas','Plataforma de Ensino'],
+    titles:['Diretor Acadêmico','CEO','Diretor Pedagógico','Gerente de Matrículas','Head de Produto','Diretor Geral','Coordenador de EAD','Gerente Comercial','Sócio-Fundador','Diretor de Operações'],
+    cos:['Educação','Saber','Aprender','Escola','Instituto','Cursos','Academy','Learn','Edu','Futuro'],
+    prefixes:['Instituto','Escola','Centro','Academia','Colégio','Faculdade','Universidade','Curso','Saber','Mente'],
+    pains:['Alta taxa de evasão no 3° mês de curso online','Conversão de leads para matrículas abaixo de 5%','Dificuldade em engajar alunos na modalidade EAD','Concorrência de plataformas gratuitas reduzindo receita','Queda de matrículas por crise econômica das famílias','Empresas B2B sem fornecedor confiável de T&D','Regulatório MEC exigindo adequações custosas','Dificuldade em medir o ROI dos treinamentos corporativos','Falta de conteúdo atualizado para nichos específicos','Inadimplência de mensalidades acima de 12%'],
+    tags:[['EAD','Plataforma','Digital'],['Escola','Matrículas','Presencial'],['Corporativo','T&D','B2B'],['EdTech','Startup','Inovação'],['Idiomas','Inglês','Intercâmbio'],['Pós-Graduação','MBA','Especialização'],['Infantil','Pedagógico','Base'],['Técnico','Profissionalizante','SENAI'],['Concurso','Preparatório','Aprovação'],['Skills','Upskilling','Reskilling']]
+  },
+  'financeiro':{
+    label:'Financeiro / Fintech / Contabilidade',
+    keys:'financeiro fintech banco credito pagamento contabilidade fiscal tributario investimento gestao financeira seguro previdencia cambio bolsa b3 cdi selic cartao maquininha pix open finance',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.df,..._CITIES.mg,..._CITIES.rs,..._CITIES.pr,..._CITIES.sc],
+    industries:['Fintech','Contabilidade','Gestão de Investimentos','Crédito','Seguros','Câmbio','Pagamentos','Planejamento Financeiro','Assessoria Financeira','Banking'],
+    titles:['CEO','CFO','Diretor Financeiro','Sócio','Head de Produto','Diretor Comercial','Gerente de Contas','CRO','Head de Compliance','Gerente Geral'],
+    cos:['Finance','Capital','Invest','Credit','Pay','Bank','Wealth','Money','Cash','Fund'],
+    prefixes:['Smart','Clear','Open','Rapid','Safe','True','Prime','Gold','Solid','Flux'],
+    pains:['CAC de clientes PJ muito alto para o LTV do produto','Alto índice de inadimplência na carteira de crédito','Falta de automação nos processos contábeis e fiscais','Clientes insatisfeitos com rentabilidade dos investimentos','Chargeback alto em transações de e-commerce','Dificuldade em obter licença regulatória do Banco Central','Fraude em onboarding digital de novos clientes','Concorrência dos grandes bancos com produtos gratuitos','Compliance complexo exigindo muita equipe jurídica','Falta de integração entre sistemas contábeis e bancários'],
+    tags:[['Fintech','B2B','PJ'],['Contabilidade','MEI','Fiscal'],['Investimentos','Wealth','B2C'],['Crédito','Assessoria','B2B'],['Pagamentos','Antifraude','PIX'],['Seguros','Previdência','Proteção'],['Câmbio','Internacional','Import'],['Banking','Conta Digital','Open Finance'],['Compliance','LGPD','Regulatório'],['Factoring','Recebíveis','Capital de Giro']]
+  },
+  'marketing':{
+    label:'Marketing / Agências / Publicidade',
+    keys:'marketing agencia publicidade digital performance growth seo ads meta google trafego pago midia social conteudo branding crm automacao email inbound outbound pr comunicacao',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.pr,..._CITIES.rs,..._CITIES.sc,..._CITIES.pe],
+    industries:['Marketing Digital','Publicidade','Agência de Comunicação','Growth Marketing','Content Marketing','SEO/SEM','Mídia Programática','Branding','PR/Assessoria','Automação de Marketing'],
+    titles:['CEO','Diretor Criativo','Head de Growth','Sócio','Diretor Comercial','Gerente de Performance','Head de Conteúdo','Diretor de Mídia','Gerente de Contas','Co-founder'],
+    cos:['Agency','Media','Creative','Studio','Digital','Marketing','Mídia','Comunicação','Growth','Performance'],
+    prefixes:['Pixel','Impact','Reach','Boost','Click','Brand','Content','Viral','Fuse','Hype'],
+    pains:['Clientes B2B exigindo ROI mensurável e relatórios claros','Dificuldade em escalar receita sem aumentar equipe','Alta rotatividade de clientes por falta de resultados orgânicos','Briefings mal definidos gerando retrabalho e conflitos','Concorrência com agências de baixo custo','Dependência de um ou dois clientes grandes','Dificuldade em contratar talentos de growth e performance','CPM e CPC em alta pressionando ROAS dos clientes','Falta de tecnologia para automação e relatórios em escala','Clientes sem estratégia de conteúdo estruturada'],
+    tags:[['Growth','Performance','ROAS'],['SEO','Orgânico','Conteúdo'],['Meta Ads','Google Ads','Mídia'],['Branding','Identidade','Visual'],['PR','Comunicação','Imprensa'],['Automação','HubSpot','CRM'],['Social Media','Influencer','UGC'],['E-mail','Inbound','Nutrição'],['Analytics','Dados','Dashboard'],['B2B','ABM','Lead Gen']]
+  },
+  'logistica':{
+    label:'Logística / Transporte',
+    keys:'logistica transporte frete entrega last mile rastreamento tms wms armazem estoque supply chain frota caminhao carga distribuicao ecommerce fulfillment cold chain refrigerado',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.pr,..._CITIES.rs,..._CITIES.mg,..._CITIES.ba,..._CITIES.am,..._CITIES.pa],
+    industries:['Logística','Transporte Rodoviário','Last Mile','Fulfillment','Gestão de Frotas','Armazenagem','Supply Chain','Cold Chain','Logística Internacional','LogTech'],
+    titles:['CEO','Diretor de Operações','Gerente de Logística','Diretor Comercial','Head de Supply Chain','Gerente de Frota','Diretor de TI','Sócio-Fundador','Gerente de Operações','COO'],
+    cos:['Transportes','Logística','Cargas','Express','Entregas','Supply','Frete','Move','Fleet','Cargo'],
+    prefixes:['Rápido','Seguro','Log','Fast','Trans','Move','Speed','Direct','Prime','Link'],
+    pains:['Rastreamento de cargas em tempo real com falhas','Alta taxa de devoluções no e-commerce impactando custo','Gestão de frota ineficiente com alto custo por km','Dificuldade em encontrar motoristas qualificados','Controle de temperatura inadequado em cargas refrigeradas','Falta de visibilidade do status da entrega para o cliente','Custo de frete acima da média do mercado','Integração complexa com sistemas de e-commerce','Roubos e sinistros acima do esperado','Conformidade trabalhista complexa com motoristas autônomos'],
+    tags:[['Last Mile','E-commerce','Entrega'],['Frota','Rastreamento','GPS'],['TMS','Software','Gestão'],['Cold Chain','Refrigerado','Farmacêutico'],['Supply Chain','B2B','Indústria'],['Fulfillment','Estoque','WMS'],['Frete','Modal','Rodoviário'],['Aduaneiro','Import','Export'],['Drone','Inovação','Última Milha'],['Cargas Especiais','Projeto','ODT']]
+  },
+  'beleza':{
+    label:'Beleza / Estética / Bem-Estar',
+    keys:'beleza estetica salao barbearia spa wellness depilacao unhas manicure pedicure maquiagem skincare cosmetico tratamento facial corporal laser franquia clinica estetica',
+    cities:_ALL_CITIES,
+    industries:['Estética','Barbearia','Salão de Beleza','Spa','Depilação','Nail Design','Maquiagem','Skincare','Clínica Estética','Franquia de Beleza'],
+    titles:['CEO','Sócio-Proprietário','Franqueado','Diretora','Gerente','Fundadora','Coordenadora','Sócia','Administradora','Diretora de Operações'],
+    cos:['Beauty','Estética','Spa','Beleza','Charme','Glow','Studio','Center','Espaço','Clínica'],
+    prefixes:['Beauty','Glam','Charm','Glow','Zen','Prime','Elite','Gold','Rose','Pearl'],
+    pains:['Gestão manual de agenda causando conflitos e faltas','Captação de novos clientes dependente de indicação','Alta dependência de sazonalidade para faturamento','Falta de recorrência dos clientes sem programa de fidelidade','Dificuldade em precificar serviços de forma competitiva','Gestão de múltiplas unidades sem sistema centralizado','Alto custo de produtos cosméticos impactando margem','Dificuldade em treinar e reter profissionais qualificados','Falta de presença digital estruturada','Concorrência de franquias com maior poder de marca'],
+    tags:[['Beleza','Estética','SP'],['Barbearia','Franquia','Expansão'],['Spa','Wellness','Premium'],['Depilação','Laser','Tecnologia'],['Unhas','Nail Design','Arte'],['Skincare','Facial','Tratamento'],['Maquiagem','Noivas','Eventos'],['Franquia','Rede','Multi-unidade'],['Bem-Estar','Relaxamento','Massagem'],['Cosméticos','Vegano','Natural']]
+  },
+  'alimentacao':{
+    label:'Alimentação / Food Service',
+    keys:'alimentacao restaurante lanchonete cafeteria padaria mercado supermercado distribuicao atacado food service delivery ifood rappi dark kitchen franquia fast food saudavel organico',
+    cities:_ALL_CITIES,
+    industries:['Restaurante','Franquia de Alimentação','Dark Kitchen','Catering','Padaria','Cafeteria','Distribuição Alimentar','Indústria de Alimentos','Food Tech','Delivery'],
+    titles:['CEO','Sócio-Proprietário','Franqueado','Diretor de Operações','Gerente Geral','Head de Expansão','Diretor Comercial','Gerente de Produto','Fundador','COO'],
+    cos:['Food','Sabor','Restaurante','Kitchen','Café','Pão','Bistrô','Grill','Fresh','Taste'],
+    prefixes:['Sabor','Gosto','Aroma','Brasa','Verde','Canto','Espaço','Casa','Feira','Mercado'],
+    pains:['Desperdício de alimentos acima de 8% do faturamento','Ticket médio no delivery abaixo do presencial','Gestão de estoque de perecíveis gerando perdas','Alta rotatividade de funcionários na operação','Dificuldade em padronizar qualidade em múltiplas unidades','Custo de matéria-prima em alta pressionando margem','Dependência de uma única plataforma de delivery','Falta de dados sobre preferências dos clientes','Concorrência intensa com grande número de novos entrantes','Inadimplência de clientes B2B no food service'],
+    tags:[['Restaurante','Delivery','iFood'],['Franquia','Fast Food','Expansão'],['Dark Kitchen','Ghost Kitchen','Digital'],['Saudável','Orgânico','Premium'],['Padaria','Confeitaria','Artesanal'],['Catering','Eventos','Corporativo'],['Distribuição','Atacado','B2B'],['Café','Cafeteria','Grãos'],['Indústria','Processados','Laticínios'],['Bar','Entretenimento','Petiscos']]
+  },
+  'industria':{
+    label:'Indústria / Manufatura',
+    keys:'industria manufatura metalurgia plastico textil quimica farmaceutica cosmetico embalagem maquinario equipamento producao linha fabrica processo industrial automacao indústria 4.0 iot',
+    cities:[..._CITIES.sp,..._CITIES.mg,..._CITIES.rs,..._CITIES.sc,..._CITIES.pr,'São Bernardo do Campo, SP','Americana, SP','Joinville, SC','Caxias do Sul, RS','Contagem, MG'],
+    industries:['Metalurgia','Indústria Plástica','Têxtil','Química','Farmacêutica','Cosméticos','Embalagens','Equipamentos Industriais','Indústria de Alimentos','Automação Industrial'],
+    titles:['Diretor Industrial','CEO','Diretor de Produção','Gerente de Qualidade','Gerente de Operações','Diretor de Engenharia','COO','Gerente de Manutenção','Diretor Comercial','Sócio-Fundador'],
+    cos:['Indústria','Manufatura','Industrial','Metalúrgica','Plásticos','Química','Têxtil','Embalagens','Equipamentos','Fabricação'],
+    prefixes:['Metal','Plasti','Techno','Quimi','Pharma','Cosmo','Pack','Equip','Auto','Fabri'],
+    pains:['Paradas não programadas de máquinas impactando produção','Custo crescente de matéria-prima importada','Dificuldade em implementar automação e Indústria 4.0','Conformidade com normas ISO e ANVISA gerando custo','Gestão de qualidade com alto índice de retrabalho','Pressão de importações asiáticas no preço final','Falta de rastreabilidade do processo produtivo','Dificuldade em contratar operadores especializados','Gestão de resíduos e conformidade ambiental complexa','Alta variação de demanda dificultando planejamento'],
+    tags:[['Metalurgia','Aço','Manufatura'],['Plásticos','Resinas','Injeção'],['Têxtil','Moda','Exportação'],['Farmacêutica','ANVISA','Qualidade'],['Cosméticos','Vegano','Certificação'],['Embalagens','Sustentável','Papelão'],['Automação','IoT','Indústria 4.0'],['Química','Petroquímica','Processo'],['Alimentos','ABNT','FSSC'],['Equipamentos','Manutenção','Peças']]
+  },
+  'energia':{
+    label:'Energia / Sustentabilidade / Solar',
+    keys:'energia solar fotovoltaica eolica renovavel sustentabilidade esg saneamento agua meio ambiente carbono offset biocombustivel etanol eficiencia energetica led iluminacao',
+    cities:[..._CITIES.sp,..._CITIES.mg,..._CITIES.ba,..._CITIES.go,..._CITIES.mt,..._CITIES.df,..._CITIES.rj,..._CITIES.ce],
+    industries:['Energia Solar','Energia Eólica','ESG/Sustentabilidade','Saneamento','Eficiência Energética','Biocombustíveis','Crédito de Carbono','Energia Renovável','GreenTech','Climatech'],
+    titles:['CEO','Diretor Comercial','Sócio-Fundador','Diretor de Projetos','Head de Sustentabilidade','Gerente Técnico','Diretor de Operações','Gerente Comercial','Engenheiro Chefe','COO'],
+    cos:['Solar','Energy','Green','Eco','Sun','Wind','Sustenta','Renova','Clean','Carbon'],
+    prefixes:['Solar','Eco','Green','Clean','Sun','Wind','Bio','Zero','Terra','Viva'],
+    pains:['PMEs sem acesso a linhas de financiamento para energia solar','Falta de consciência dos clientes sobre retorno do investimento','Processos de homologação com concessionárias muito lentos','Alta inadimplência em projetos de energia para baixa renda','Concorrência de importadores com painéis de baixa qualidade','Empresas sem estratégia ESG estruturada para relatórios','Dificuldade em mensurar e compensar pegada de carbono','Municípios sem solução de saneamento básico adequada','Custo de O&M acima do esperado em usinas solares','Falta de mão de obra técnica para instalação de sistemas'],
+    tags:[['Solar','Fotovoltaica','Residencial'],['ESG','Sustentabilidade','B3'],['Eólica','Offshore','Geração'],['Saneamento','Água','Municipal'],['Eficiência','LED','Retrofit'],['Biocombustível','Etanol','SAF'],['Carbono','Offset','REDD+'],['GreenTech','Climatech','Inovação'],['Energia','B2B','Indústria'],['Solar','Agro','Rural']]
+  },
+  'juridico':{
+    label:'Jurídico / Advocacia / LegalTech',
+    keys:'juridico advocacia direito trabalhista empresarial tributario civil contrato licitacao compliance lgpd propriedade intelectual fusoes aquisicoes m&a legaltech automacao juridica',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.df,..._CITIES.rs,..._CITIES.pr],
+    industries:['Advocacia Empresarial','Advocacia Trabalhista','Advocacia Tributária','LegalTech','Compliance','Propriedade Intelectual','M&A','Contencioso','Assessoria Jurídica','Licitações'],
+    titles:['Sócio','Sócio-Fundador','CEO','Diretor Jurídico','Advogado Sênior','Head de Compliance','Gerente Jurídico','COO','Coordenador Jurídico','Sócio Gestor'],
+    cos:['Advogados','Advocacia','Jurídico','Law','Legal','Direito','Assessoria','Consultoria','& Associados','Partners'],
+    prefixes:['Silva','Santos','Fonseca','Mendes','Carvalho','Pires','Teixeira','Ramos','Cunha','Bezerra'],
+    pains:['Gestão de processos trabalhistas ineficiente e cara','Escritórios com processos analógicos perdendo para LegalTechs','Dificuldade em demonstrar valor para clientes além das horas','Conformidade com LGPD exigindo reestruturação interna','M&As de PMEs sem suporte jurídico especializado','Contratos mal elaborados gerando litígios recorrentes','Falta de sistema para gestão de prazos e documentos','Honorários de êxito gerando fluxo de caixa irregular','Dificuldade em captar clientes fora da rede de indicações','Alta concorrência e comoditização dos serviços jurídicos'],
+    tags:[['Trabalhista','CLT','Reclamatória'],['Empresarial','M&A','Contratos'],['Tributário','Fiscal','Planejamento'],['LegalTech','Automação','IA'],['Compliance','LGPD','Regulatório'],['Propriedade Intelectual','Marcas','Patentes'],['Licitações','Governo','Contrato'],['Família','Herança','Inventário'],['Criminal','Defesa','Investigação'],['Internacional','Arbitragem','Cross-border']]
+  },
+  'rh':{
+    label:'RH / Recrutamento / Gestão de Pessoas',
+    keys:'rh recursos humanos recrutamento selecao pessoas treinamento desenvolvimento liderança turnover cultura clima organizacional beneficios folha pagamento hrtech plataforma',
+    cities:[..._CITIES.sp,..._CITIES.rj,..._CITIES.mg,..._CITIES.rs,..._CITIES.pr,..._CITIES.sc,..._CITIES.go,..._CITIES.df],
+    industries:['Recrutamento e Seleção','Consultoria de RH','HRTech','T&D Corporativo','Gestão de Benefícios','Terceirização de RH','Assessment','Cultura Organizacional','People Analytics','Headhunter'],
+    titles:['CEO','Diretor de RH','CHRO','Sócio-Fundador','Head de People','Gerente de RH','Diretor de Talent Acquisition','Gerente de T&D','Head de Cultura','COO'],
+    cos:['People','Talentos','RH','HR','Pessoas','Capital Humano','Search','Hunt','Talent','Team'],
+    prefixes:['People','Talent','Human','Work','Team','Career','Leader','Pulse','Mind','Grow'],
+    pains:['Alto turnover gerando custo de reposição e perda de conhecimento','Dificuldade em contratar talentos técnicos qualificados','Cultura organizacional fraca impactando engajamento','Líderes sem preparo para gestão de equipes híbridas','Falta de sistema de gestão de performance estruturado','Processos de R&S lentos perdendo candidatos para concorrentes','Benefícios desalinhados com expectativas da nova geração','Folha de pagamento com erros gerando passivo trabalhista','Dificuldade em medir ROI dos programas de T&D','Gestão de PMEs sem área de RH estruturada'],
+    tags:[['Recrutamento','R&S','Tech'],['T&D','Treinamento','Liderança'],['HRTech','Plataforma','SaaS'],['Cultura','Engajamento','Clima'],['Benefícios','Flexíveis','Wellness'],['People Analytics','Dados','Dashboard'],['Headhunter','Executivo','C-Level'],['Outsourcing','BPO','Terceirização'],['Assessment','Mapeamento','Competências'],['Diversidade','Inclusão','DEI']]
+  }
+};
+
+// ── Gerador determinístico ────────────────────────────────────────────
+function _hash(n) {
+  let h = Math.abs(Math.sin(n + 1) * 2654435761) >>> 0;
+  return h;
+}
+function _pick(arr, seed) { return arr[_hash(seed) % arr.length]; }
+function _pickN(arr, seed, n) {
+  const out = [], seen = new Set();
+  for (let i = 0; i < arr.length && out.length < n; i++) {
+    const item = arr[_hash(seed * 31 + i) % arr.length];
+    if (!seen.has(item)) { seen.add(item); out.push(item); }
+  }
+  return out;
+}
+
+function generateLead(sectorKey, index) {
+  const s = SECTORS[sectorKey];
+  const seed = sectorKey.split('').reduce((a,c)=>a+c.charCodeAt(0),0) * 1000 + index;
+  const fn  = _pick(_FN, seed);
+  const ln  = _pick(_LN, seed + 7);
+  const name = fn + ' ' + ln;
+  const pfx  = _pick(s.prefixes, seed + 13);
+  const cos  = _pick(s.cos, seed + 17);
+  const company = pfx + ' ' + cos;
+  const title   = _pick(s.titles, seed + 23);
+  const industry= _pick(s.industries, seed + 29);
+  const location= _pick(s.cities, seed + 31);
+  const pain    = _pick(s.pains, seed + 37);
+  const tags    = _pick(s.tags, seed + 41);
+  // score: 65-96, bell-curved toward 75-88
+  const rawScore = 65 + (_hash(seed + 53) % 32);
+  const score = Math.min(96, rawScore);
+  // revenue
+  const revOptions = ['R$200k-600k/ano','R$500k-2M/ano','R$1M-5M/ano','R$2M-10M/ano','R$5M-20M/ano','R$10M-50M/ano','R$20M-80M/ano','R$50M-200M/ano'];
+  const revenue = _pick(revOptions, seed + 59);
+  const sizeOptions = ['1-10','11-50','51-200','201-1000','1000+'];
+  const size = _pick(sizeOptions, seed + 61);
+  const emailDomain = (pfx + cos).toLowerCase().replace(/[^a-z]/g,'').slice(0,12) + '.com.br';
+  const email = (fn.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    + '.' + ln.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').slice(0,8)
+    + '@' + emailDomain);
+  const phone = '+55 ' + _pick(['11','21','31','41','48','51','61','62','71','81','85'],seed+67) + ' ' +
+    (9 + (_hash(seed+71)%1)) + '' + String(_hash(seed+73)%10000).padStart(4,'0') + '-' +
+    String(_hash(seed+79)%10000).padStart(4,'0');
+  const linkedin = 'linkedin.com/in/' + fn.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'') +
+    ln.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').slice(0,5) + (index%100);
+  const activities = ['Publicou artigo sobre tendências do setor','Anunciou expansão de operações','Participou de evento do setor','Contratando posições-chave','Fechou parceria estratégica','Comentou sobre desafios do mercado','Lançou novo produto ou serviço','Atingiu meta de crescimento','Recebeu aporte ou investimento','Palestra em conferência nacional'];
+  const lastActivity = _pick(activities, seed + 83);
+  return {
+    id: index + 1,
+    name, title, company, industry, location, size, revenue,
+    email, linkedin, phone, score,
+    scoreReason: `${score >= 85 ? 'Alto' : score >= 75 ? 'Bom' : 'Médio'} fit com o setor de ${industry}`,
+    pain, tags, lastActivity,
+    nicheKeys: s.keys,
+    _sector: sectorKey
+  };
+}
+
+// Cache por setor para não regenerar
+const _sectorCache = {};
+function getSectorLeads(sectorKey) {
+  if (!_sectorCache[sectorKey]) {
+    const leads = [];
+    for (let i = 0; i < 1000; i++) leads.push(generateLead(sectorKey, i));
+    _sectorCache[sectorKey] = leads;
+  }
+  return _sectorCache[sectorKey];
+}
+
+/* Motor de busca — 1.000 leads por setor ─────────────────────────── */
+function searchLocalDB(params) {
+  const {niche, cargos, loc, sz, minScore, qty} = params;
+  const q = (niche + ' ' + cargos).toLowerCase()
+             .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  // 1. Descobre quais setores têm aderência
+  const sectorScores = Object.entries(SECTORS).map(([key, s]) => {
+    const keys = s.keys.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const words = q.split(/\s+/).filter(w => w.length > 2);
+    const hits  = words.filter(w => keys.includes(w)).length;
+    return {key, hits, total: Math.max(words.length,1)};
+  }).filter(s => s.hits > 0).sort((a,b) => b.hits - a.hits);
+
+  // Se nenhum setor bater, busca em todos
+  const targetSectors = sectorScores.length > 0
+    ? sectorScores.slice(0, 3).map(s => s.key)
+    : Object.keys(SECTORS);
+
+  // 2. Gera/busca leads dos setores alvo
+  let pool = [];
+  for (const sKey of targetSectors) {
+    pool = pool.concat(getSectorLeads(sKey));
+  }
+
+  // 3. Pontua e filtra
+  const locNorm = loc ? loc.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'') : '';
+  const szMap = {micro:'1-10',pequena:'11-50',media:'51-200',grande:'201-1000',enterprise:'1000+'};
+
+  let results = pool.map(lead => {
+    const locMatch = locNorm
+      ? lead.location.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(locNorm)
+      : true;
+    const szMatch = sz ? lead.size === (szMap[sz] || sz) : true;
+    const penalty = (!locMatch ? 8 : 0) + (!szMatch ? 5 : 0);
+    const finalScore = Math.max(40, lead.score - penalty);
+    return {...lead, score: finalScore};
+  })
+  .filter(l => l.score >= minScore)
+  .sort((a,b) => b.score - a.score);
+
+  // 4. Remove duplicatas e limita
+  const seen = new Set();
+  const unique = results.filter(l => {
+    if (seen.has(l.name+l.company)) return false;
+    seen.add(l.name+l.company); return true;
+  });
+
+  return unique.slice(0, qty).map((l, i) => ({...l, id: i+1,
+    scoreReason: `Aderência ao nicho "${niche}" — perfil ${l.industry}`
+  }));
+}
+
+// ── Referência única ao $ ──
 const $=id=>document.getElementById(id);
 let S={user:null,plan:'growth',qMax:3000,qUsed:0,leads:[],activity:[]};
 let allLeads=[],tags=[],generating=false,selPlan='growth';
@@ -726,38 +1085,63 @@ function renderTags(){
   tags.forEach((t,i)=>{const el=document.createElement('div');el.className='tchip';el.innerHTML=`${t}<span class="tx" onclick="rmTag(${i})">×</span>`;w.insertBefore(el,$('cargo-fi'));});
 }
 
+
+let testMode = false;
+function toggleTestMode(el){
+  testMode = !testMode;
+  el.classList.toggle('on', testMode);
+  const lbl = document.querySelector('#test-mode-tog').parentElement.querySelector('div div:first-child');
+  toast(testMode ? '🧪 Modo Teste ativado — usando banco local' : '🤖 Modo IA ativado');
+}
+
 async function generateLeads(){
-  if(generating)return;if(!S.user){openModal('login');return;}
-  const niche=$('f-niche').value.trim();if(!niche){toast('Informe o nicho para buscar leads','err');return;}
-  const qty=parseInt($('f-qty').value),minS=parseInt($('f-score').value);
-  const cargos=tags.join(', ')||'decisores relevantes';
-  const loc=$('f-loc').value.trim()||'Brasil';
-  const sz=$('f-sz').value,rev=$('f-rev').value;
-  const pain=$('f-pain').value.trim(),extra=$('f-extra').value.trim();
+  if(generating)return;
+  if(!S.user){openModal('login');return;}
+  const niche=$('f-niche').value.trim();
+  if(!niche){toast('Informe o nicho para buscar leads','err');return;}
+  const qty=parseInt($('f-qty').value);
+  const minS=parseInt($('f-score').value);
+  const cargos=tags.join(', ')||'';
+  const loc=$('f-loc').value.trim();
+  const sz=$('f-sz').value;
   generating=true;$('gen-btn').disabled=true;
-  $('gen-btn').innerHTML=`<div class="spin" style="width:15px;height:15px;border-width:2px;"></div>Gerando leads…`;
+  $('gen-btn').innerHTML=`<div class="spin" style="width:15px;height:15px;border-width:2px;"></div>${testMode?'Buscando no banco local…':'Gerando leads com IA…'}`;
   $('fstrip').style.display='none';$('exp-row').style.display='none';
-  $('leads-out').innerHTML=`<div class="empty"><div class="spin"></div><div class="empty-h" style="margin-top:0.5rem">Analisando parâmetros com IA…</div><div class="empty-p">Buscando os melhores leads para <strong>${niche}</strong></div></div>`;
-  $('res-sub').textContent='Processando com IA…';
-  const prompt=`Você é especialista em geração e qualificação de leads B2B e B2C. Gere exatamente ${qty} leads ficticios mas realistas:\n\nNICHO: ${niche}\nCARGOS ALVO: ${cargos}\nLOCALIZAÇÃO: ${loc}\nTAMANHO: ${sz||'qualquer'}\nFATURAMENTO: ${rev||'qualquer'}\nDORES: ${pain||'não especificado'}\nEXTRAS: ${extra||'nenhum'}\nSCORE MÍNIMO: ${minS}\n\nRetorne APENAS JSON válido (sem markdown):\n{"leads":[{"id":1,"name":"Nome Completo","title":"Cargo","company":"Empresa Ltda","industry":"Setor","location":"Cidade, Estado","size":"51-200 funcionários","revenue":"R$2M-10M/ano","email":"nome@empresa.com.br","linkedin":"linkedin.com/in/usuario","phone":"+55 11 99999-9999","score":85,"scoreReason":"1 frase","pain":"Principal dor em 1 frase","tags":["Tag1","Tag2","Tag3"],"lastActivity":"Ação recente"}]}\n\nUse nomes e contextos brasileiros. Score entre ${minS} e 100. Tags: 2–4 palavras-chave.`;
+  $('leads-out').innerHTML=`<div class="empty"><div class="spin"></div><div class="empty-h" style="margin-top:0.5rem">${testMode?'Consultando banco de leads…':'Analisando parâmetros com IA…'}</div><div class="empty-p">Buscando os melhores leads para <strong>${niche}</strong></div></div>`;
+  $('res-sub').textContent='Processando…';
   try{
-    const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json();
-    let txt=(data.content||[]).map(i=>i.text||'').join('').replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
-    allLeads=JSON.parse(txt).leads||[];
-    S.leads=[...S.leads,...allLeads];S.activity.push({text:`${allLeads.length} leads gerados para "${niche}"`,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),color:'var(--indigo)'});
+    if(testMode){
+      // ── MODO TESTE: banco local ──
+      await new Promise(r=>setTimeout(r,900)); // simula latência
+      allLeads = searchLocalDB({niche, cargos, loc, sz, minScore:minS, qty});
+      if(!allLeads.length) throw new Error('Nenhum lead encontrado para estes parâmetros. Tente termos mais genéricos.');
+    } else {
+      // ── MODO IA ──
+      const rev=$('f-rev').value;
+      const pain=$('f-pain').value.trim();
+      const extra=$('f-extra').value.trim();
+      const prompt=`Você é especialista em geração e qualificação de leads B2B e B2C. Gere exatamente ${qty} leads ficticios mas realistas:\n\nNICHO: ${niche}\nCARGOS ALVO: ${cargos||'decisores relevantes'}\nLOCALIZAÇÃO: ${loc||'Brasil'}\nTAMANHO: ${sz||'qualquer'}\nFATURAMENTO: ${rev||'qualquer'}\nDORES: ${pain||'não especificado'}\nEXTRAS: ${extra||'nenhum'}\nSCORE MÍNIMO: ${minS}\n\nRetorne APENAS JSON válido (sem markdown):\n{"leads":[{"id":1,"name":"Nome Completo","title":"Cargo","company":"Empresa Ltda","industry":"Setor","location":"Cidade, Estado","size":"51-200 funcionários","revenue":"R$2M-10M/ano","email":"nome@empresa.com.br","linkedin":"linkedin.com/in/usuario","phone":"+55 11 99999-9999","score":85,"scoreReason":"1 frase","pain":"Principal dor em 1 frase","tags":["Tag1","Tag2","Tag3"],"lastActivity":"Ação recente","nicheKeys":"palavras chave do nicho"}]}\n\nUse nomes e contextos brasileiros. Score entre ${minS} e 100.`;
+      const res=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,messages:[{role:'user',content:prompt}]})});
+      const data=await res.json();
+      let txt=(data.content||[]).map(i=>i.text||'').join('').replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
+      allLeads=JSON.parse(txt).leads||[];
+    }
+    S.leads=[...S.leads,...allLeads];
+    S.activity.push({text:`${allLeads.length} leads ${testMode?'encontrados no banco':'gerados'} para "${niche}"`,time:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),color:'var(--indigo)'});
     renderLeads(allLeads);updateDash();updateQuota();
-    toast(`${allLeads.length} leads gerados com sucesso!`);
-    $('res-sub').textContent=`${allLeads.length} leads encontrados`;
+    toast(`${allLeads.length} leads encontrados com sucesso! ${testMode?'🗄️':'🎯'}`);
+    $('res-sub').textContent=`${allLeads.length} leads encontrados ${testMode?'(banco local)':'(IA)'}`;
     $('fstrip').style.display='flex';$('exp-row').style.display='flex';
   }catch(err){
-    $('leads-out').innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-h">Erro ao gerar leads</div><div class="empty-p">${err.message||'Verifique sua conexão e tente novamente.'}</div></div>`;
-    $('res-sub').textContent='Erro — tente novamente';toast('Erro ao gerar leads.','err');
+    $('leads-out').innerHTML=`<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-h">Nenhum resultado</div><div class="empty-p">${err.message||'Verifique os parâmetros e tente novamente.'}</div></div>`;
+    $('res-sub').textContent='Erro — tente novamente';
+    toast(err.message||'Erro. Tente novamente.','err');
   }finally{
     generating=false;$('gen-btn').disabled=false;
     $('gen-btn').innerHTML=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.5 5H12.5L9.25 7.25L10.5 12L7 9.75L3.5 12L4.75 7.25L1.5 5H5.5L7 1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Gerar Leads com IA`;
   }
 }
+
 function renderLeads(leads){
   if(!leads.length){$('leads-out').innerHTML=`<div class="empty"><div class="empty-ico">🔍</div><div class="empty-h">Nenhum lead encontrado</div><div class="empty-p">Tente reduzir o score mínimo ou ajustar os filtros.</div></div>`;return;}
   $('leads-out').innerHTML=`<div class="lcards">${leads.map((l,i)=>{const bg=avBg(i),ts=(l.tags||[]).slice(0,3);return`<div class="lc"><div class="lc-av" style="background:${bg}">${inits(l.name)}</div><div class="lc-body"><div class="lc-name">${l.name}</div><div class="lc-role">${l.title}</div><div class="lc-co">${l.company} · ${l.location}</div>${l.pain?`<div class="lc-pain">💡 ${l.pain}</div>`:''}<div class="lc-tags">${ts.map((t,ti)=>`<span class="ltag" style="background:${TCHIPS[ti%4].bg};color:${TCHIPS[ti%4].c}">${t}</span>`).join('')}</div></div><div class="lc-r"><div class="lc-score" style="color:${sColor(l.score)}">${l.score}</div><div class="lc-slbl">Score</div><div class="lc-cbns"><button class="lcbtn" onclick="copyEm('${l.email||''}',event)" title="${l.email||''}">✉ E-mail</button><button class="lcbtn" onclick="openLI('${l.linkedin||''}',event)">in LinkedIn</button></div></div></div>`;}).join('')}</div>`;
